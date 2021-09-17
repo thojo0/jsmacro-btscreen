@@ -1,85 +1,96 @@
 const theScreen = Hud.createScreen("Builder's GUI", false);
 const draw2D = Hud.createDraw2D();
 
-const buttonWidth = 100;
-const buttonHeight = 20;
+const componentWidth = 100;
+const componentHeight = 20;
 const groupSpacing = 10;
 const titleHeight = 20;
 
+// Data source
 const sections = [
 	{
 		title: "Basic",
 		groups: [
-			[
-				"wand", "pos1", "pos2"
-			], [
-				"cut", "undo", "redo"
-			], [
-				"deselect", "hpos1", "hpos2"
-			]
+			[ "wand", "pos1", "pos2" ],
+			[ "cut", "undo", "redo" ],
+			[ "deselect", "hpos1", "hpos2" ]
 		]
-	},
-	{
+	}, {
 		title: "Whatever",
 		groups: [
-			[
-				"jumpto", "thru"
-			], [
-				"copy", "paste", "flip"
-			]
+			[ "jumpto", "thru" ],
+			[ "copy", "paste", "flip" ]
 		]
 	}
 ]
 
-function buildButton(screen,xOffset,yOffset,x,y,text,func){
-	const width = 100;
-	const height = 20;
-
-	return screen.addButton(
-		xOffset + x*width, yOffset + y*height,
-		width, height,
-		1, // zIndex?
-		text,JavaWrapper.methodToJava(func || function(){
-			Chat.say(text);
-			Chat.log("[S] " + text);
+/**
+ * Gets the simple section group data and turns it into final components
+ */
+function setSectionComponents(section){
+	section.groups = section.groups.map(group => {
+		return group.map( component => {
+			let type = typeof component;
+			if (type == "string") {
+				let command = "//" + component;
+				return {
+					type: "commandButton",
+					width: componentWidth,
+					height: componentHeight,
+					render: function(screen,xOffset,yOffset,func){
+						screen.addButton(
+							xOffset, yOffset,
+							componentWidth, componentHeight,
+							1,
+							commmand,
+							JavaWrapper.methodToJava(func)
+						)
+					},
+					method: function(){
+						Chat.say(command);
+						Chat.log("[S] " + command);
+					},
+				}
+			} else {
+				return component;
+			}
 		})
-	);
+	});
 }
 
-// modifies data
-function setSectionDimensions(section, ind, sections){
-	let maxGroupSize = section.groups.reduce((prev,curr) => Math.max( prev, curr.length ), 0);
-	let groupsCount = section.groups.length;
-	section.height = (section.title ? titleHeight : 0) + maxGroupSize*buttonHeight;
-	section.width = groupsCount*buttonWidth + (groupsCount - 1)*groupSpacing;
+/**
+ * Setting the dimensions for each section based on the width and height of the components
+ * in each group.
+ *
+ * @info there is a negative groupSpacing value in the initial reducer to remove the last spacing
+ * */
+function setSectionDimensions(section){
+	let sectionDimensions = section.groups.reduce((prev,curr,ind) => {
+		let groupDimensions = curr.reduce((prev,curr) => {
+			return {
+				width: Math.max(prev.width, curr.width),
+				height: prev.height + curr.height
+			}
+		}, {width:0, height:0});
+		return {
+			width: prev.width + groupDimensions.width + groupSpacing,
+			height: Math.max(prev.height, groupDimensions.height)
+		};
+	}, {width: -groupSpacing, height: 0});
+	section.height = (section.title ? titleHeight : 0) + sectionDimensions.height;
+	section.width = sectionDimensions.width;
 }
 
 function screenInit(){
+	sections.forEach( setSectionComponents );
 	sections.forEach( setSectionDimensions );
-	let totalHeight = sections.reduce((prev,curr) => prev+curr.height, 0);
-	let totalWidth = sections.reduce((prev,curr) => Math.max(prev,curr.width), 0);
-
-	let basicGrid = [
-		["//wand",	"//copy", "//paste"],
-		["//pos1",	"//hpos1", "//undo"],
-		["//pos2",	"//hpos2", "//redo"],
-		["//set 0", "//jumpto"]
-	];
-	let WIDTH = draw2D.getWidth();
-	let HEIGHT = draw2D.getHeight();
-	let centerX = WIDTH/2;
-	let centerY = HEIGHT/2;
-	let maxGridWidth = 3;
-	let xOffset = centerX - (buttonWidth*maxGridWidth)/2;
-	let yOffset = centerY - (buttonHeight*basicGrid.length)/2;
-
-	for(let y = 0; y < basicGrid.length; y++){
-		for(let x = 0; x < basicGrid[y].length; x++){
-			buildButton(
-				theScreen, Math.floor(xOffset), Math.floor(yOffset), x, y, basicGrid[y][x]
-			);
-		}
-	}
+	const totalHeight = sections.reduce((prev,curr) => prev+curr.height, 0);
+	const totalWidth = sections.reduce((prev,curr) => Math.max(prev,curr.width), 0);
+	const screenWidth = draw2D.getWidth();
+	const screenHeight = draw2D.getHeight();
+	const xOffset = Math.floor(screenWidth/2) - totalWidth;
+	const yOffset = Math.floor(screenHeight/2) - totalHeight;
+	let baseOffset = {x:0,y:0};
 }
 
 theScreen.setOnInit(JavaWrapper.methodToJava(screenInit));

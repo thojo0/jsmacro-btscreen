@@ -27,66 +27,56 @@ setlocal fdl=20
 setlocal fml=1
 setlocal fdn=20
 setlocal fen
-9
-normal! zo
 10
 normal! zo
-12
+30
 normal! zo
-22
+31
+normal! zo
+31
+normal! zo
+32
+normal! zo
+32
 normal! zo
 34
 normal! zo
-38
+36
 normal! zo
-42
+40
 normal! zo
-49
+69
 normal! zo
-53
-normal! zo
-58
+70
 normal! zo
 74
 normal! zo
-75
+60
 normal! zo
-34
+69
 normal! zo
-38
+70
 normal! zo
-42
+74
 normal! zo
-50
+67
 normal! zo
-56
+68
 normal! zo
-57
+68
 normal! zo
-75
+69
 normal! zo
-76
+69
 normal! zo
-57
-normal! zo
-62
-normal! zo
-76
-normal! zo
-77
-normal! zo
-76
-normal! zo
-77
-normal! zo
-let s:l = 61 - ((60 * winheight(0) + 40) / 81)
+let s:l = 63 - ((48 * winheight(0) + 40) / 81)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-61
-normal! 0
+63
+normal! 02|
 tabnext 1
-badd +55 WEScreen/InitiateWEScreen.js
+badd +0 WEScreen/InitiateWEScreen.js
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0
   silent exe 'bwipe ' . s:wipebuf
 endif
