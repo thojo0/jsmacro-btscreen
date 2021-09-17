@@ -8,3 +8,5 @@ Builder's GUI screen for the jsMacro mod in Minecraft.
 3. Paste the contents of this repository inside that folder. Or clone this folder instead of that one.
 4. Attach the `WorldJoin.js` file to the `WorldJoin` Event, inside your jsMacros console
 5. Attach the `OpenWEScreen.js` to the key that you would like to open the screen with.
+
+![GUI Screenshot](image.jpg)
