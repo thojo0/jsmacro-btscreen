@@ -3,15 +3,33 @@ const draw2D = Hud.createDraw2D();
 
 const buttonWidth = 100;
 const buttonHeight = 20;
+const groupSpacing = 10;
+const titleHeight = 20;
 
-// Creating DATA to render
-let simpleCommands = ["wand", "undo", "redo", "cut", "pos1", "pos2", "hpos1", "hpos2", "jumpto"];
-
-function sectionTitle(x,y,text){
-	let el = Hud.createDraw2D();
-	el.addText(text,x,y,0x8,true);
-	return el;
-}
+const sections = [
+	{
+		title: "Basic",
+		groups: [
+			[
+				"wand", "pos1", "pos2"
+			], [
+				"cut", "undo", "redo"
+			], [
+				"deselect", "hpos1", "hpos2"
+			]
+		]
+	},
+	{
+		title: "Whatever",
+		groups: [
+			[
+				"jumpto", "thru"
+			], [
+				"copy", "paste", "flip"
+			]
+		]
+	}
+]
 
 function buildButton(screen,xOffset,yOffset,x,y,text,func){
 	const width = 100;
@@ -28,7 +46,19 @@ function buildButton(screen,xOffset,yOffset,x,y,text,func){
 	);
 }
 
+// modifies data
+function setSectionDimensions(section, ind, sections){
+	let maxGroupSize = section.groups.reduce((prev,curr) => Math.max( prev, curr.length ), 0);
+	let groupsCount = section.groups.length;
+	section.height = (section.title ? titleHeight : 0) + maxGroupSize*buttonHeight;
+	section.width = groupsCount*buttonWidth + (groupsCount - 1)*groupSpacing;
+}
+
 function screenInit(){
+	sections.forEach( setSectionDimensions );
+	let totalHeight = sections.reduce((prev,curr) => prev+curr.height, 0);
+	let totalWidth = sections.reduce((prev,curr) => Math.max(prev,curr.width), 0);
+
 	let basicGrid = [
 		["//wand",	"//copy", "//paste"],
 		["//pos1",	"//hpos1", "//undo"],
@@ -50,8 +80,6 @@ function screenInit(){
 			);
 		}
 	}
-	let title = sectionTitle(50,50,"BRUH");
-	Hud.registerDraw2D(title);
 }
 
 theScreen.setOnInit(JavaWrapper.methodToJava(screenInit));
