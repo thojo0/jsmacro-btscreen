@@ -42,7 +42,7 @@ function setSectionComponents(section){
 							xOffset, yOffset,
 							componentWidth, componentHeight,
 							1,
-							commmand,
+							command,
 							JavaWrapper.methodToJava(func)
 						)
 					},
@@ -81,6 +81,10 @@ function setSectionDimensions(section){
 	section.width = sectionDimensions.width;
 }
 
+function getGroupWidth(group){
+	return group.reduce((prev,curr)=>Math.max(prev,curr.width), 0)
+}
+
 function screenInit(){
 	sections.forEach( setSectionComponents );
 	sections.forEach( setSectionDimensions );
@@ -88,9 +92,31 @@ function screenInit(){
 	const totalWidth = sections.reduce((prev,curr) => Math.max(prev,curr.width), 0);
 	const screenWidth = draw2D.getWidth();
 	const screenHeight = draw2D.getHeight();
-	const xOffset = Math.floor(screenWidth/2) - totalWidth;
-	const yOffset = Math.floor(screenHeight/2) - totalHeight;
-	let baseOffset = {x:0,y:0};
+	const xOffset = Math.floor(screenWidth/2) - totalWidth/2;
+	const yOffset = Math.floor(screenHeight/2) - totalHeight/2;
+	let baseOffset = {x:xOffset,y:yOffset};
+	// render sections
+	sections.forEach(section => {
+		let sectionOffset = {x:baseOffset.x,y:baseOffset.y};
+		// render the title
+		sectionOffset.y += titleHeight;
+
+		// render the groups
+		section.groups.forEach(group => {
+			let groupOffset = {x: sectionOffset.x, y: sectionOffset.y};
+			group.forEach(component => {
+				component.render(
+					theScreen,
+					groupOffset.x,
+					groupOffset.y,
+					component.method
+				);
+				groupOffset.y += component.height;
+			})
+			sectionOffset.x += getGroupWidth(group) + groupSpacing
+		});
+		baseOffset.y += section.height;
+	});
 }
 
 theScreen.setOnInit(JavaWrapper.methodToJava(screenInit));
