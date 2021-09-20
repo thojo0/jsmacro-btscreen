@@ -113,7 +113,7 @@ function screenInit(){
 	sections.forEach(section => {
 		let sectionOffset = {x:baseOffset.x,y:baseOffset.y};
 		// render the title
-		renderTitle(theScreen, section.title, screenWidth/2, sectionOffset.y + titleHeight - 20);
+		renderTitle(theScreen, section.title, toInt(screenWidth/2), toInt(sectionOffset.y + titleHeight - 20));
 		sectionOffset.y += titleHeight;
 
 		// render the groups
