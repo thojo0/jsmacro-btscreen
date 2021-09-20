@@ -1,10 +1,14 @@
 const theScreen = Hud.createScreen("Builder's GUI", false);
 const draw2D = Hud.createDraw2D();
 
+const toInt = a => Math.round(a);
+
 const componentWidth = 100;
 const componentHeight = 20;
 const groupSpacing = 10;
-const titleHeight = 20;
+const titleHeight = 30;
+
+const dimensionalInput = require("./dimensionalInput.js");
 
 // Data source
 const sections = [
@@ -21,6 +25,11 @@ const sections = [
 			[ "jumpto", "thru" ],
 			[ "copy", "paste", "flip" ]
 		]
+	}, {
+		title: "Dimensional Inputs",
+		groups: [
+			[ dimensionalInput("expand"), dimensionalInput("shift"), dimensionalInput("move") ]
+		]
 	}
 ]
 
@@ -33,23 +42,23 @@ function setSectionComponents(section){
 			let type = typeof component;
 			if (type == "string") {
 				let command = "//" + component;
+				let method = function(){
+					Chat.say(command);
+					Chat.log("[S] " + command);
+				};
 				return {
 					type: "commandButton",
 					width: componentWidth,
 					height: componentHeight,
-					render: function(screen,xOffset,yOffset,func){
+					render: function(screen,xOffset,yOffset){
 						screen.addButton(
 							xOffset, yOffset,
 							componentWidth, componentHeight,
 							1,
 							command,
-							JavaWrapper.methodToJava(func)
+							JavaWrapper.methodToJava(method)
 						)
-					},
-					method: function(){
-						Chat.say(command);
-						Chat.log("[S] " + command);
-					},
+					}
 				}
 			} else {
 				return component;
@@ -85,6 +94,11 @@ function getGroupWidth(group){
 	return group.reduce((prev,curr)=>Math.max(prev,curr.width), 0)
 }
 
+function renderTitle(screen,title,xOffset,yOffset){
+	let textElement = screen.addText(title, xOffset, yOffset, 0xffffff, true);
+	textElement.setPos( toInt(xOffset - textElement.getWidth()/2), yOffset + 5 );
+}
+
 function screenInit(){
 	sections.forEach( setSectionComponents );
 	sections.forEach( setSectionDimensions );
@@ -92,13 +106,14 @@ function screenInit(){
 	const totalWidth = sections.reduce((prev,curr) => Math.max(prev,curr.width), 0);
 	const screenWidth = draw2D.getWidth();
 	const screenHeight = draw2D.getHeight();
-	const xOffset = Math.floor(screenWidth/2) - totalWidth/2;
-	const yOffset = Math.floor(screenHeight/2) - totalHeight/2;
+	const xOffset = toInt(screenWidth/2) - totalWidth/2;
+	const yOffset = toInt(screenHeight/2) - totalHeight/2;
 	let baseOffset = {x:xOffset,y:yOffset};
 	// render sections
 	sections.forEach(section => {
 		let sectionOffset = {x:baseOffset.x,y:baseOffset.y};
 		// render the title
+		renderTitle(theScreen, section.title, screenWidth/2, sectionOffset.y + titleHeight - 20);
 		sectionOffset.y += titleHeight;
 
 		// render the groups
@@ -109,7 +124,6 @@ function screenInit(){
 					theScreen,
 					groupOffset.x,
 					groupOffset.y,
-					component.method
 				);
 				groupOffset.y += component.height;
 			})
