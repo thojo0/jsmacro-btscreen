@@ -1,6 +1,8 @@
 const groupSpacing = 10;
 const dirButtonHeight = 20;
 const dirButtonWidth = 30;
+const inputWidth = 30;
+const commandTextWidth = 50;
 
 
 let directionCommandFunction = function(command, direction){
@@ -22,7 +24,7 @@ module.exports = function(command){
 
 	return {
 		type: "dimensionalInput",
-		width: 300,
+		width: commandTextWidth + inputWidth + groupSpacing*2 + dirButtonWidth*3,
 		height: 20 + dirButtonHeight*2 + 10,
 		render: function(screen,xOffset,yOffset){
 			let componentOffset = { x: xOffset, y: yOffset };
@@ -33,16 +35,16 @@ module.exports = function(command){
 				0xffffff,
 				true
 			);
-			componentOffset.x += 100 + groupSpacing;
+			componentOffset.x += commandTextWidth + groupSpacing;
 
 			let intInput = screen.addTextInput(
 				componentOffset.x,
 				componentOffset.y + dirButtonHeight,
-				100, 20, 1,
+				inputWidth, 20, 1,
 				command,
 				JavaWrapper.methodToJava(inputMethod)
 			).setText("1", false);
-			componentOffset.x += 100 + groupSpacing;
+			componentOffset.x += inputWidth + groupSpacing;
 
 			// directionButtons
 			screen.addButton(

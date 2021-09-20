@@ -23,12 +23,14 @@ const sections = [
 		title: "Whatever",
 		groups: [
 			[ "jumpto", "thru" ],
-			[ "copy", "paste", "flip" ]
+			[ "copy", "paste"  ],
+			[ "flip" ]
 		]
 	}, {
 		title: "Dimensional Inputs",
 		groups: [
-			[ dimensionalInput("expand"), dimensionalInput("shift"), dimensionalInput("move") ]
+			[ dimensionalInput("expand"), dimensionalInput("shift")],
+			[ dimensionalInput("move"), dimensionalInput("stack")]
 		]
 	}
 ]
@@ -106,12 +108,12 @@ function screenInit(){
 	const totalWidth = sections.reduce((prev,curr) => Math.max(prev,curr.width), 0);
 	const screenWidth = draw2D.getWidth();
 	const screenHeight = draw2D.getHeight();
-	const xOffset = toInt(screenWidth/2) - totalWidth/2;
+	const xOffset = toInt(screenWidth/2);
 	const yOffset = toInt(screenHeight/2) - totalHeight/2;
-	let baseOffset = {x:xOffset,y:yOffset};
+	let baseOffset = {x: xOffset, y: yOffset};
 	// render sections
 	sections.forEach(section => {
-		let sectionOffset = {x:baseOffset.x,y:baseOffset.y};
+		let sectionOffset = {x:baseOffset.x - section.width/2,y:baseOffset.y};
 		// render the title
 		renderTitle(theScreen, section.title, toInt(screenWidth/2), toInt(sectionOffset.y + titleHeight - 20));
 		sectionOffset.y += titleHeight;
