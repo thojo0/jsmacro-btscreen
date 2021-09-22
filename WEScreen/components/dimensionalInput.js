@@ -1,8 +1,10 @@
-const groupSpacing = 10;
-const dirButtonHeight = 20;
-const dirButtonWidth = 30;
-const inputWidth = 30;
-const commandTextWidth = 50;
+const {
+	groupSpacing,
+	dirButtonHeight,
+	dirButtonWidth,
+	inputWidth,
+	commandTextWidth
+} = require("../config.js");
 
 
 let directionCommandFunction = function(command, direction){

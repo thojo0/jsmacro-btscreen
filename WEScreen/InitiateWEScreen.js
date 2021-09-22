@@ -3,12 +3,10 @@ const draw2D = Hud.createDraw2D();
 
 const toInt = a => Math.round(a);
 
-const componentWidth = 100;
-const componentHeight = 20;
-const groupSpacing = 10;
-const titleHeight = 30;
+const { componentWidth, componentHeight, groupSpacing, titleHeight } = require("./config.js");
 
-const dimensionalInput = require("./dimensionalInput.js");
+const dimensionalInput = require("./components/dimensionalInput.js");
+const setHeldItemButton = require("./components/setHeldItemButton.js");
 
 // Data source
 const sections = [
@@ -20,11 +18,11 @@ const sections = [
 			[ "deselect", "hpos1", "hpos2" ]
 		]
 	}, {
-		title: "Whatever",
+		title: "Miscellaneous",
 		groups: [
 			[ "jumpto", "thru" ],
 			[ "copy", "paste"  ],
-			[ "flip" ]
+			[ "flip", setHeldItemButton() ]
 		]
 	}, {
 		title: "Dimensional Inputs",
