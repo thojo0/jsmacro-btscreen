@@ -7,18 +7,29 @@ const { componentWidth, componentHeight, groupSpacing, titleHeight } = require("
 
 const dimensionalInput = require("./components/dimensionalInput.js");
 const setHeldItemButton = require("./components/setHeldItemButton.js");
+const repeatLastCommandButton = require("./components/repeatLastCommandButton.js");
 
 // Data source
 const sections = [
 	{
-		title: "Basic",
+		title: "Tools and Miscellaneous",
+		groups: [
+			[
+				["stoneCylinder", "br cyl stone 3 2"],
+				repeatLastCommandButton()
+			],
+			[ "/plot home", "/home", "/server creative" ]
+		]
+	},
+	{
+		title: "Basic Selection",
 		groups: [
 			[ "wand", "pos1", "pos2" ],
 			[ "cut", "undo", "redo" ],
-			[ "deselect", "hpos1", "hpos2" ]
+			[ "deselect", "hpos1", "hpos2" ],
 		]
 	}, {
-		title: "Miscellaneous",
+		title: "Movement and Clipboard",
 		groups: [
 			[ "jumpto", "thru" ],
 			[ "copy", "paste"  ],
@@ -41,7 +52,7 @@ function setSectionComponents(section){
 		return group.map( component => {
 			let type = typeof component;
 			if (type == "string") {
-				let command = "//" + component;
+				let command = component[0] != "/" ? "//" + component : component;
 				let method = function(){
 					Chat.say(command);
 					Chat.log("[S] " + command);
@@ -56,6 +67,26 @@ function setSectionComponents(section){
 							componentWidth, componentHeight,
 							1,
 							command,
+							JavaWrapper.methodToJava(method)
+						)
+					}
+				}
+			} else if (component.constructor.name == "Array") {
+				let command = component[1][0] != "/" ? "//" + component[1] : component[1];
+				let method = function(){
+					Chat.say(command);
+					Chat.log("[S] " + command);
+				};
+				return {
+					type: "customTitleCommandButton",
+					width: componentWidth,
+					height: componentHeight,
+					render: function(screen,xOffset,yOffset){
+						screen.addButton(
+							xOffset, yOffset,
+							componentWidth, componentHeight,
+							1,
+							component[0],
 							JavaWrapper.methodToJava(method)
 						)
 					}
