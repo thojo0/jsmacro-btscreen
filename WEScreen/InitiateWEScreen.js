@@ -18,7 +18,7 @@ const sections = [
 				["stoneCylinder", "br cyl stone 3 2"],
 				repeatLastCommandButton()
 			],
-			[ "/plot home", "/home", "/server creative" ]
+			[ "/plot home", "/home" ]
 		]
 	},
 	{
