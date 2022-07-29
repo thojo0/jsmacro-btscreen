@@ -1,7 +1,13 @@
 # builder-macro-screen
 Builder's GUI screen for the jsMacro mod in Minecraft. Contains handy w/e command shortcuts that I use a lot.
 
-## Installation
+- [Installation](#installation)
+  - [Experienced Installation](#experienced-installation)
+  - [Modding Newbie Installation](#for-absolute-modding-newbies)
+
+# Installation
+
+## Experienced Installation
 
 1. Install a jsMacro mod for Fabric or Forge.
 2. Locate the Macros folder where your jsMacros is looking for the js files to execute (can be done through jsMacros GUI).
