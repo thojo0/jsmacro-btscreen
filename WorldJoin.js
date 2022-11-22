@@ -1,1 +1,1 @@
-JsMacros.runScript("./WEScreen/InitiateWEScreen.js");
+JsMacros.runScript("./BTScreen/Initiate.js");
