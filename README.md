@@ -4,6 +4,8 @@ Selection Manager GUI screen for the jsMacro mod in Minecraft. Contains [Bariton
 You can add your own commands like in [Builder's GUI](https://github.com/Godje/builder-macro-screen) in `BTScreen/Initiate.js`
 >This project is a modified version of the [Builder's GUI](https://github.com/Godje/builder-macro-screen) by [Godje](https://github.com/Godje)
 
+![GUI Screenshot](image.jpg)
+
 # Installation
 
 1. Install jsMacro mod for Fabric or Forge.
