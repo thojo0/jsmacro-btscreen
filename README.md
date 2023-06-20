@@ -9,7 +9,7 @@ Baritone Selection Manager GUI (BTScreen) for the [JsMacro](https://github.com/J
 - `AutoSleep` feature (needs sethome-like commands)
 - prefered settings for perimeter building
 - `BTScreenStatusChange` event
-- You can add your own commands like in [Builder's GUI](https://github.com/Godje/builder-macro-screen), but in a diffrent file: `BTScreen/sections.js`
+- You can add your own commands like in [Builder's GUI](https://github.com/Godje/builder-macro-screen), but in a different file: `BTScreen/sections.js`
 
 ![GUI Screenshot](image.jpg)
 
