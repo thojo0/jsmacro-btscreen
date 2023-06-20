@@ -1,2 +1,2 @@
 const service = JsMacros.getServiceManager().getServiceData("BTScreen");
-Hud.openScreen(service.getObject("screen"));
+service.getObject("log")("Status: " + service.getString("status"));

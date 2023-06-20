@@ -1,16 +1,30 @@
-# selection-macro-screen
-Selection Manager GUI screen for the jsMacro mod in Minecraft. Contains [Baritone](https://github.com/cabaletta/baritone) sel command shortcuts, for easy use.
+# jsmacro-btscreen
+Baritone Selection Manager GUI (BTScreen) for the [JsMacro](https://github.com/JsMacros/JsMacros) mod in Minecraft. It started with [Baritone](https://github.com/cabaletta/baritone) sel command shortcuts, for easy use. Now it has a lot more features.
 
-You can add your own commands like in [Builder's GUI](https://github.com/Godje/builder-macro-screen) in `BTScreen/Initiate.js`
->This project is a modified version of the [Builder's GUI](https://github.com/Godje/builder-macro-screen) by [Godje](https://github.com/Godje)
+>This project is a (heavy) modified version of the [Builder's GUI](https://github.com/Godje/builder-macro-screen) by [Godje](https://github.com/Godje)
+
+#### Features
+
+- `AutoRepair` feature (needs set-/home commands)
+- `AutoSleep` feature (needs set-/home command)
+- prefered settings for perimeter building
+- `BTScreenStatusChange` event
+- You can add your own commands like in [Builder's GUI](https://github.com/Godje/builder-macro-screen), but in a diffrent file: `BTScreen/sections.js`
 
 ![GUI Screenshot](image.jpg)
 
 # Installation
 
-1. Install jsMacro mod for Fabric or Forge.
-2. Install Baritone mod for Fabric or Forge.
-3. Locate the Macros folder where your jsMacros is looking for the js files to execute (can be done through jsMacros GUI).
-4. Paste the contents of this repository inside that folder. Or clone this folder instead of that one.
-5. Attach the `WorldJoin.js` file to the `JoinServer` Event, inside your jsMacros GUI (go to Controls to see how to open your jsMacro GUI)
+1. Install [JsMacro](https://github.com/JsMacros/JsMacros/releases) mod for Fabric or Forge.
+2. Install [Baritone-Api](https://github.com/cabaletta/baritone/releases) mod for Fabric or Forge.
+3. Locate the Macros folder where your JsMacros is looking for the js files to execute (can be done through jsMacros GUI).
+4. Paste the `BTScreen` folder of this repository inside that folder. Or clone this folder instead.
+5. Add a new service, named `BTScreen` and linked to the file `BTScreen/Service.js`, inside your JsMacros GUI (go to Controls to see how to open your JsMacro GUI)
+   Don't forget to `Enable` and `Start` the service.
 6. Attach the `BTScreen/Open.js` to the key that you would like to open the screen with.
+7. You can change the homes/cmds (and more) in `BTScreen/config.js` (or button `Open config.js`)
+   Just restart the service to reload the config.
+
+#### For Experts
+8. A demo to see how to get the current status is inside `BTScreen/ReadStatus.js` (to test just execut the file somehow)
+7. A demo for the event is in `BTScreen/Listener.js`, you can enable the demo in the config (`eventLogger`).
