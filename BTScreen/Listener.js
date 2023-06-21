@@ -9,13 +9,17 @@ listener.push(
       const baritoneState = btIsActive();
       if (oldBaritoneState !== baritoneState) {
         changedStateTick++;
-        if (changedStateTick === 3) {
+        if (changedStateTick === 4) {
           if (baritoneState) {
             event.putString("status", state.mine);
           } else {
             event.putString("status", state.idle);
           }
           oldBaritoneState = baritoneState;
+          changedStateTick = 0;
+        }
+      } else {
+        if (changedStateTick) {
           changedStateTick = 0;
         }
       }
