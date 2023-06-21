@@ -42,7 +42,7 @@ function startDamageListener() {
           }
           break;
         case state.mine:
-          if (e.item.getMaxDamage() - e.damage <= 50) {
+          if (e.item.getMaxDamage() - e.damage <= 20) {
             const nbt = e.item.getNBT();
             if (nbt.has("Enchantments")) {
               const enchantments = nbt.get("Enchantments");

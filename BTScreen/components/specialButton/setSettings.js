@@ -4,7 +4,7 @@ module.exports = () => {
     btExecute("set allowPlace true");
     btExecute("set buildInLayers true");
     btExecute("set itemSaver true");
-    btExecute("set itemSaverThreshold 30");
+    btExecute("set itemSaverThreshold 10");
     btExecute("set layerHeight 5");
     btExecute("set layerOrder true");
     const blocks = config.block.disallow;
