@@ -71,73 +71,56 @@ const draw2D = Hud.createDraw2D();
 function setSectionComponents(section) {
   section.groups = section.groups.map((group) => {
     return group.map((component) => {
-      let type = typeof component;
-      if (type == "string") {
-        let command = component;
-        if (!command)
-          return {
-            type: "empty",
-            width: config.componentWidth,
-            height: config.componentHeight,
-            render: function (screen, xOffset, yOffset) {},
-          };
-        let method = function () {
-          switch (command[0]) {
-            case "/":
-              Chat.say(command);
-              break;
-            default:
-              btExecute(command);
-              break;
+      const button = {
+        width: config.componentWidth,
+        height: config.componentHeight,
+      };
+      let command;
+      let title;
+      switch (component.constructor.name) {
+        case "String":
+          if (!component) {
+            button.type = "empty";
+            button.render = function (screen, xOffset, yOffset) {};
+            return button;
+          } else {
+            button.type = "commandButton";
+            command = component;
+            title = component;
           }
-        };
-        return {
-          type: "commandButton",
-          width: config.componentWidth,
-          height: config.componentHeight,
-          render: function (screen, xOffset, yOffset) {
-            screen.addButton(
-              xOffset,
-              yOffset,
-              config.componentWidth,
-              config.componentHeight,
-              1,
-              command,
-              JavaWrapper.methodToJavaAsync(method)
-            );
-          },
-        };
-      } else if (component.constructor.name == "Array") {
-        let command = component[1];
-        let method = function () {
-          switch (command[0]) {
-            case "/":
-              Chat.say(command);
-              break;
-            default:
-              btExecute(command);
-              break;
-          }
-        };
-        return {
-          type: "customTitleCommandButton",
-          width: config.componentWidth,
-          height: config.componentHeight,
-          render: function (screen, xOffset, yOffset) {
-            screen.addButton(
-              xOffset,
-              yOffset,
-              config.componentWidth,
-              config.componentHeight,
-              1,
-              component[0],
-              JavaWrapper.methodToJavaAsync(method)
-            );
-          },
-        };
-      } else {
-        return component;
+          break;
+
+        case "Array":
+          button.type = "customTitleCommandButton";
+          command = component[0];
+          title = component[1];
+          break;
+
+        default:
+          return component;
       }
+      function method() {
+        switch (command[0]) {
+          case "/":
+            Chat.say(command);
+            break;
+          default:
+            btExecute(command);
+            break;
+        }
+      }
+      button.render = function (screen, xOffset, yOffset) {
+        screen.addButton(
+          xOffset,
+          yOffset,
+          config.componentWidth,
+          config.componentHeight,
+          1,
+          title,
+          JavaWrapper.methodToJavaAsync(method)
+        );
+      };
+      return button;
     });
   });
 }
