@@ -5,7 +5,7 @@ Baritone Selection Manager GUI (BTScreen) for the [JsMacro](https://github.com/J
 
 #### Features
 
-- `AutoRepair` feature (needs sethome-like commands)
+- `AutoRepair` tool feature (needs sethome-like commands)
 - `AutoSleep` feature (needs sethome-like commands)
 - prefered settings for perimeter building
 - `BTScreenStatusChange` event
