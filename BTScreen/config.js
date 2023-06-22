@@ -7,6 +7,10 @@ module.exports = {
     bed: "bed", // begins with "/" -> getcmd will not be put infront
     sleep: 2000, // time to wait after teleports (in milliseconds)
   },
+  eat: {
+    holdTicks: 33,
+    minLevel: 16,
+  },
   eventLogger: false,
 
   componentWidth: 105,

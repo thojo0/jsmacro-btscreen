@@ -79,13 +79,13 @@ function startTickListener() {
       }
     })
   );
-  addStop("autoSleep", () => {
+  addStop(label, () => {
     JsMacros.off(tickListener);
     tickListener = null;
   });
 }
 function stopTickListener() {
-  delStop("autoSleep", true);
+  delStop(label, true);
 }
 function getText() {
   const builder = Chat.createTextBuilder().append(label);

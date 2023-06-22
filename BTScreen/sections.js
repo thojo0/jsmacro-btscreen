@@ -16,6 +16,7 @@ module.exports = [
         specialButton.stop(),
         specialButton.autoSleep(),
         specialButton.autoRepair(),
+        specialButton.autoEat(),
       ],
       [
         specialButton.setSettings(),

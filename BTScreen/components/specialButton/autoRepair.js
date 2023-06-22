@@ -88,13 +88,13 @@ function startDamageListener() {
       }
     })
   );
-  addStop("autoRepair", () => {
+  addStop(label, () => {
     JsMacros.off(damageListener);
     damageListener = null;
   });
 }
 function stopDamageListener() {
-  delStop("autoRepair", true);
+  delStop(label, true);
 }
 function getText() {
   const builder = Chat.createTextBuilder().append(label);
