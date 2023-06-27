@@ -3,17 +3,13 @@ function getText() {
   for (let l = 0; l < 3; l++) {
     builder.append(" ");
     builder.append("STOP");
-    builder.withColor(
-      Math.floor(Math.random() * 256),
-      Math.floor(Math.random() * 256),
-      Math.floor(Math.random() * 256)
-    );
+    builder.withColor(random(255), random(255), random(255));
     builder.withFormatting(
-      Boolean(Math.floor(Math.random() * 2)),
-      Boolean(Math.floor(Math.random() * 2)),
-      Boolean(Math.floor(Math.random() * 2)),
-      Boolean(Math.floor(Math.random() * 2)),
-      Boolean(Math.floor(Math.random() * 2))
+      Boolean(random(1)),
+      Boolean(random(1)),
+      Boolean(random(1)),
+      Boolean(random(1)),
+      Boolean(random(1))
     );
     builder.append(" ");
   }
@@ -26,15 +22,15 @@ module.exports = () => {
   }
   return {
     type: "specialButton",
-    width: config.componentWidth,
-    height: config.componentHeight,
+    width: config.gui.component.width,
+    height: config.gui.component.height,
     render: function (screen, xOffset, yOffset) {
       screen
         .addButton(
           xOffset,
           yOffset,
-          config.componentWidth,
-          config.componentHeight,
+          config.gui.component.width,
+          config.gui.component.height,
           1,
           "STOP",
           JavaWrapper.methodToJava(method)

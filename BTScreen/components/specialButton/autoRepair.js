@@ -37,12 +37,12 @@ function startDamageListener() {
     JavaWrapper.methodToJava((e) => {
       switch (event.getString("status")) {
         case state.repair:
-          if (e.item.isItemEqualIgnoreDamage(item) && e.damage <= 10) {
+          if (e.item.isItemEqualIgnoreDamage(item) && e.damage <= config.autoRepair.stop) {
             running = false;
           }
           break;
         case state.mine:
-          if (e.item.getMaxDamage() - e.damage <= 20) {
+          if (e.item.getMaxDamage() - e.damage <= config.autoRepair.start) {
             const nbt = e.item.getNBT();
             if (nbt.has("Enchantments")) {
               const enchantments = nbt.get("Enchantments");
@@ -69,7 +69,7 @@ function startDamageListener() {
                       default:
                         JsMacros.waitForEvent(config.eventName);
                     }
-                    Time.sleep(Math.floor(Math.random() * 1500 + 1500));
+                    Time.sleep(config.sleep.hit);
                   }
                   switchBack();
                   if (running) {
@@ -120,14 +120,14 @@ module.exports = () => {
   }
   return {
     type: "specialButton",
-    width: config.componentWidth,
-    height: config.componentHeight,
+    width: config.gui.component.width,
+    height: config.gui.component.height,
     render: function (screen, xOffset, yOffset) {
       button = screen.addButton(
         xOffset,
         yOffset,
-        config.componentWidth,
-        config.componentHeight,
+        config.gui.component.width,
+        config.gui.component.height,
         1,
         label,
         JavaWrapper.methodToJava(method)

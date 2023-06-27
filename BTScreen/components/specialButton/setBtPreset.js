@@ -1,11 +1,6 @@
-const EditorScreen = Java.type(
-  "xyz.wagyourtail.jsmacros.client.gui.screens.EditorScreen"
-);
-
-module.exports = (file, label = "Open " + FS.getName(file)) => {
+module.exports = (preset) => {
   function method() {
-    const fileh = FS.open(file).getFile();
-    EditorScreen.openAndScrollToIndex(fileh, 0, 0);
+    setBtPreset(preset);
   }
   return {
     type: "specialButton",
@@ -18,7 +13,7 @@ module.exports = (file, label = "Open " + FS.getName(file)) => {
         config.gui.component.width,
         config.gui.component.height,
         1,
-        label,
+        "Preset: " + preset,
         JavaWrapper.methodToJava(method)
       );
     },

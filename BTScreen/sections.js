@@ -19,7 +19,7 @@ module.exports = [
         specialButton.autoEat(),
       ],
       [
-        specialButton.setSettings(),
+        specialButton.setBtPreset("default"),
         specialButton.restartService(),
         specialButton.openFile(__dirname + "/config.js"),
       ],
