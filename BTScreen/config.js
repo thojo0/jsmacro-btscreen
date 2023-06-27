@@ -7,6 +7,11 @@ module.exports = {
     xp: "xp", // begins with "/" -> getcmd will not be put infront
     bed: "bed", // begins with "/" -> getcmd will not be put infront
   },
+  // autoEat settings
+  autoEat: {
+    hold: 33, // time to hold right click to eat (in ticks)
+    level: 16, // when food level is less -> eat
+  },
   // autoRepair settings
   autoRepair: {
     // durability under specified value
@@ -24,10 +29,6 @@ module.exports = {
       const rsleep = random(1500);
       return sleep + rsleep;
     },
-  },
-  eat: {
-    holdTicks: 33,
-    minLevel: 16,
   },
   eventLogger: false,
 

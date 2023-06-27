@@ -12,10 +12,10 @@ function startHungerListener() {
     JavaWrapper.methodToJava((e) => {
       switch (event.getString("status")) {
         case state.mine:
-          if (e.foodLevel < config.eat.minLevel) {
+          if (e.foodLevel < config.autoEat.level) {
             log("Eating");
             KeyBind.key("key.mouse.right", true);
-            Client.waitTick(config.eat.holdTicks);
+            Client.waitTick(config.autoEat.hold);
             KeyBind.key("key.mouse.right", false);
           }
       }
@@ -53,14 +53,14 @@ module.exports = () => {
   }
   return {
     type: "specialButton",
-    width: config.componentWidth,
-    height: config.componentHeight,
+    width: config.gui.component.width,
+    height: config.gui.component.height,
     render: function (screen, xOffset, yOffset) {
       button = screen.addButton(
         xOffset,
         yOffset,
-        config.componentWidth,
-        config.componentHeight,
+        config.gui.component.width,
+        config.gui.component.height,
         1,
         label,
         JavaWrapper.methodToJava(method)
