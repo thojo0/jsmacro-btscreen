@@ -26,6 +26,9 @@ function delStop(name, exec) {
 function toInt(a) {
   return Math.round(a);
 }
+function random(range) {
+  return toInt(Math.random() * range);
+}
 const baritone = Java.type("baritone.api.BaritoneAPI")
   .getProvider()
   .getPrimaryBaritone();
@@ -37,6 +40,14 @@ const state = {
 function btIsActive() {
   return baritone.getPathingControlManager().mostRecentInControl().isPresent();
 }
+function setBtPreset(preset) {
+  for (let [key, value] of Object.entries(config.baritone[preset])) {
+    if (value.constructor.name === "Array") {
+      value = value.join();
+    }
+    btExecute(["set", key, value].join(" "));
+  }
+}
 function teleport(home) {
   Chat.say(
     config.home[home].startsWith("/")
@@ -44,7 +55,7 @@ function teleport(home) {
       : config.home.getcmd + " " + config.home[home],
     true
   );
-  Time.sleep(config.home.sleep);
+  Time.sleep(config.sleep.tp);
 }
 const config = require("./config.js");
 const sections = require("./sections.js");
@@ -54,6 +65,7 @@ event.stopListener = JavaWrapper.methodToJava(() => {
   Object.values(event.getObject("stopObject")).forEach((s) => s());
 });
 event.putObject("log", log);
+event.putObject("setBtPreset", setBtPreset);
 event.putObject("addStop", addStop);
 event.putObject("delStop", delStop);
 if (btIsActive()) {
@@ -72,8 +84,8 @@ function setSectionComponents(section) {
   section.groups = section.groups.map((group) => {
     return group.map((component) => {
       const button = {
-        width: config.componentWidth,
-        height: config.componentHeight,
+        width: config.gui.component.width,
+        height: config.gui.component.height,
       };
       let command;
       let title;
@@ -113,8 +125,8 @@ function setSectionComponents(section) {
         screen.addButton(
           xOffset,
           yOffset,
-          config.componentWidth,
-          config.componentHeight,
+          config.gui.component.width,
+          config.gui.component.height,
           1,
           title,
           JavaWrapper.methodToJavaAsync(method)
@@ -144,14 +156,14 @@ function setSectionDimensions(section) {
         { width: 0, height: 0 }
       );
       return {
-        width: prev.width + groupDimensions.width + config.groupSpacing,
+        width: prev.width + groupDimensions.width + config.gui.groupSpacing,
         height: Math.max(prev.height, groupDimensions.height),
       };
     },
-    { width: -config.groupSpacing, height: 0 }
+    { width: -config.gui.groupSpacing, height: 0 }
   );
   section.height =
-    (section.title ? config.titleHeight : 0) + sectionDimensions.height;
+    (section.title ? config.gui.titleHeight : 0) + sectionDimensions.height;
   section.width = sectionDimensions.width;
 }
 
@@ -188,9 +200,9 @@ function screenInit() {
       theScreen,
       section.title,
       toInt(screenWidth / 2),
-      toInt(sectionOffset.y + config.titleHeight - 20)
+      toInt(sectionOffset.y + config.gui.titleHeight - 20)
     );
-    sectionOffset.y += config.titleHeight;
+    sectionOffset.y += config.gui.titleHeight;
 
     // render the groups
     section.groups.forEach((group) => {
@@ -199,7 +211,7 @@ function screenInit() {
         component.render(theScreen, toInt(groupOffset.x), toInt(groupOffset.y));
         groupOffset.y += component.height;
       });
-      sectionOffset.x += getGroupWidth(group) + config.groupSpacing;
+      sectionOffset.x += getGroupWidth(group) + config.gui.groupSpacing;
     });
     baseOffset.y += section.height;
   });

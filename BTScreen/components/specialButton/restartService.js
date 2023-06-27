@@ -14,14 +14,14 @@ module.exports = () => {
   }
   return {
     type: "specialButton",
-    width: config.componentWidth,
-    height: config.componentHeight,
+    width: config.gui.component.width,
+    height: config.gui.component.height,
     render: function (screen, xOffset, yOffset) {
       screen.addButton(
         xOffset,
         yOffset,
-        config.componentWidth,
-        config.componentHeight,
+        config.gui.component.width,
+        config.gui.component.height,
         1,
         "Restart Service",
         JavaWrapper.methodToJava(method(screen))

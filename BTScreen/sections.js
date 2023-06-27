@@ -18,7 +18,7 @@ module.exports = [
         specialButton.autoRepair(),
       ],
       [
-        specialButton.setSettings(),
+        specialButton.setBtPreset("default"),
         specialButton.restartService(),
         specialButton.openFile(__dirname + "/config.js"),
       ],

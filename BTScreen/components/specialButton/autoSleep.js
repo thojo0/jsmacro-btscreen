@@ -12,69 +12,72 @@ function startTickListener() {
     JavaWrapper.methodToJava(() => {
       switch (event.getString("status")) {
         case state.mine:
-          const playerEntity = Player.getPlayer();
           let daytime = getDaytime();
-          if (pause && 0 < daytime && daytime < 12600) {
-            pause = false;
-          }
-          if (!pause && 12600 < daytime && daytime < 23000) {
-            event.putString("status", state.sleep);
-            btExecute("pause");
-            Time.sleep(1);
-            Chat.say(config.home.setcmd + " " + config.home.mine, true);
-            teleport("bed");
-            const pos = playerEntity.getBlockPos();
-            playerEntity.interactBlock(
-              pos.getX() - 1,
-              pos.getY(),
-              pos.getZ(),
-              1,
-              false,
-              true
-            );
-            Time.sleep(100);
-            playerEntity.interactBlock(
-              pos.getX() + 1,
-              pos.getY(),
-              pos.getZ(),
-              1,
-              false,
-              true
-            );
-            Time.sleep(100);
-            playerEntity.interactBlock(
-              pos.getX(),
-              pos.getY(),
-              pos.getZ() - 1,
-              1,
-              false,
-              true
-            );
-            Time.sleep(100);
-            playerEntity.interactBlock(
-              pos.getX(),
-              pos.getY(),
-              pos.getZ() + 1,
-              1,
-              false,
-              true
-            );
-            Time.sleep(1000);
-            while (playerEntity.isSleeping()) {
-              if (playerEntity.isSleepingLongEnough()) {
-                const screen = Hud.getOpenScreen();
-                if (screen) screen.close();
-              }
-              Time.sleep(1000);
+          if (pause) {
+            if (0 < daytime && daytime < 12600) {
+              pause = false;
             }
-            daytime = getDaytime();
+          } else {
             if (12600 < daytime && daytime < 23000) {
-              pause = true;
+              event.putString("status", state.sleep);
+              btExecute("pause");
+              Time.sleep(1);
+              Chat.say(config.home.setcmd + " " + config.home.mine, true);
+              teleport("bed");
+              const playerEntity = Player.getPlayer();
+              const pos = playerEntity.getBlockPos();
+              playerEntity.interactBlock(
+                pos.getX() - 1,
+                pos.getY(),
+                pos.getZ(),
+                1,
+                false,
+                true
+              );
+              Client.waitTick(config.sleep.interact);
+              playerEntity.interactBlock(
+                pos.getX() + 1,
+                pos.getY(),
+                pos.getZ(),
+                1,
+                false,
+                true
+              );
+              Client.waitTick(config.sleep.interact);
+              playerEntity.interactBlock(
+                pos.getX(),
+                pos.getY(),
+                pos.getZ() - 1,
+                1,
+                false,
+                true
+              );
+              Client.waitTick(config.sleep.interact);
+              playerEntity.interactBlock(
+                pos.getX(),
+                pos.getY(),
+                pos.getZ() + 1,
+                1,
+                false,
+                true
+              );
+              Client.waitTick(config.sleep.check);
+              while (playerEntity.isSleeping()) {
+                if (playerEntity.isSleepingLongEnough()) {
+                  const screen = Hud.getOpenScreen();
+                  if (screen) screen.close();
+                }
+                Client.waitTick(config.sleep.check);
+              }
+              daytime = getDaytime();
+              if (12600 < daytime && daytime < 23000) {
+                pause = true;
+              }
+              teleport("mine");
+              btExecute("resume");
+              Time.sleep(1);
+              event.putString("status", state.mine);
             }
-            teleport("mine");
-            btExecute("resume");
-            Time.sleep(1);
-            event.putString("status", state.mine);
           }
       }
     })
@@ -111,14 +114,14 @@ module.exports = () => {
   }
   return {
     type: "specialButton",
-    width: config.componentWidth,
-    height: config.componentHeight,
+    width: config.gui.component.width,
+    height: config.gui.component.height,
     render: function (screen, xOffset, yOffset) {
       button = screen.addButton(
         xOffset,
         yOffset,
-        config.componentWidth,
-        config.componentHeight,
+        config.gui.component.width,
+        config.gui.component.height,
         1,
         label,
         JavaWrapper.methodToJava(method)
