@@ -22,56 +22,65 @@ function startTickListener() {
               event.putString("status", state.sleep);
               btExecute("pause");
               Time.sleep(1);
+              const prevDim = World.getDimension();
               Chat.say(config.home.setcmd + " " + config.home.mine, true);
               teleport("bed");
-              const playerEntity = Player.getPlayer();
-              const pos = playerEntity.getBlockPos();
-              playerEntity.interactBlock(
-                pos.getX() - 1,
-                pos.getY(),
-                pos.getZ(),
-                1,
-                false,
-                true
-              );
-              Client.waitTick(config.sleep.interact);
-              playerEntity.interactBlock(
-                pos.getX() + 1,
-                pos.getY(),
-                pos.getZ(),
-                1,
-                false,
-                true
-              );
-              Client.waitTick(config.sleep.interact);
-              playerEntity.interactBlock(
-                pos.getX(),
-                pos.getY(),
-                pos.getZ() - 1,
-                1,
-                false,
-                true
-              );
-              Client.waitTick(config.sleep.interact);
-              playerEntity.interactBlock(
-                pos.getX(),
-                pos.getY(),
-                pos.getZ() + 1,
-                1,
-                false,
-                true
-              );
-              Client.waitTick(config.sleep.check);
-              while (playerEntity.isSleeping()) {
-                if (playerEntity.isSleepingLongEnough()) {
-                  const screen = Hud.getOpenScreen();
-                  if (screen) screen.close();
-                }
+              if (
+                config.autoSleep.dimensionCheck &&
+                prevDim !== World.getDimension()
+              ) {
+                log("Error: Dimention not the same after teleport");
+                stopTickListener();
+              } else {
+                const playerEntity = Player.getPlayer();
+                const pos = playerEntity.getBlockPos();
+                playerEntity.interactBlock(
+                  pos.getX() - 1,
+                  pos.getY(),
+                  pos.getZ(),
+                  1,
+                  false,
+                  true
+                );
+                Client.waitTick(config.sleep.interact);
+                playerEntity.interactBlock(
+                  pos.getX() + 1,
+                  pos.getY(),
+                  pos.getZ(),
+                  1,
+                  false,
+                  true
+                );
+                Client.waitTick(config.sleep.interact);
+                playerEntity.interactBlock(
+                  pos.getX(),
+                  pos.getY(),
+                  pos.getZ() - 1,
+                  1,
+                  false,
+                  true
+                );
+                Client.waitTick(config.sleep.interact);
+                playerEntity.interactBlock(
+                  pos.getX(),
+                  pos.getY(),
+                  pos.getZ() + 1,
+                  1,
+                  false,
+                  true
+                );
                 Client.waitTick(config.sleep.check);
-              }
-              daytime = getDaytime();
-              if (12600 < daytime && daytime < 23000) {
-                pause = true;
+                while (playerEntity.isSleeping()) {
+                  if (playerEntity.isSleepingLongEnough()) {
+                    const screen = Hud.getOpenScreen();
+                    if (screen) screen.close();
+                  }
+                  Client.waitTick(config.sleep.check);
+                }
+                daytime = getDaytime();
+                if (12600 < daytime && daytime < 23000) {
+                  pause = true;
+                }
               }
               teleport("mine");
               btExecute("resume");
@@ -86,9 +95,11 @@ function startTickListener() {
     JsMacros.off(tickListener);
     tickListener = null;
   });
+  log(label + " enabled");
 }
 function stopTickListener() {
   delStop(label, true);
+  log(label + " disabled");
 }
 function getText() {
   const builder = Chat.createTextBuilder().append(label);
@@ -105,10 +116,8 @@ module.exports = () => {
   function method() {
     if (tickListener === null) {
       startTickListener();
-      log(label + " enabled");
     } else {
       stopTickListener();
-      log(label + " disabled");
     }
     button.setLabel(getText());
   }

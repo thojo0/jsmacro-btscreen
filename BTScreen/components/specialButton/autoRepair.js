@@ -37,7 +37,10 @@ function startDamageListener() {
     JavaWrapper.methodToJava((e) => {
       switch (event.getString("status")) {
         case state.repair:
-          if (e.item.isItemEqualIgnoreDamage(item) && e.damage <= config.autoRepair.stop) {
+          if (
+            e.item.isItemEqualIgnoreDamage(item) &&
+            e.damage <= config.autoRepair.stop
+          ) {
             running = false;
           }
           break;
@@ -92,9 +95,11 @@ function startDamageListener() {
     JsMacros.off(damageListener);
     damageListener = null;
   });
+  log(label + " enabled");
 }
 function stopDamageListener() {
   delStop(label, true);
+  log(label + " disabled");
 }
 function getText() {
   const builder = Chat.createTextBuilder().append(label);
@@ -111,10 +116,8 @@ module.exports = () => {
   function method() {
     if (damageListener === null) {
       startDamageListener();
-      log(label + " enabled");
     } else {
       stopDamageListener();
-      log(label + " disabled");
     }
     button.setLabel(getText());
   }
