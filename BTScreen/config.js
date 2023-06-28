@@ -13,6 +13,10 @@ module.exports = {
     start: 25,
     stop: 10, // reversed
   },
+  // autoSleep settings
+  autoSleep: {
+    dimensionCheck: true, // check if in same dimention after teleport else deactivate
+  },
   // Sleep/Wait timings (time to wait ...)
   sleep: {
     tp: 2000, // after teleports (in milliseconds)
