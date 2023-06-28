@@ -24,9 +24,11 @@ function startHungerListener() {
     JsMacros.off(hungerListener);
     hungerListener = null;
   });
+  log(label + " enabled");
 }
 function stopHungerListener() {
   delStop(label, true);
+  log(label + " disabled");
 }
 function getText() {
   const builder = Chat.createTextBuilder().append(label);
@@ -43,10 +45,8 @@ module.exports = () => {
   function method() {
     if (hungerListener === null) {
       startHungerListener();
-      log(label + " enabled");
     } else {
       stopHungerListener();
-      log(label + " disabled");
     }
     button.setLabel(getText());
   }
