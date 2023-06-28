@@ -120,8 +120,8 @@ module.exports = () => {
       button = screen.addButton(
         xOffset,
         yOffset,
-        config.gui.component.width,
-        config.gui.component.height,
+        this.width,
+        this.height,
         1,
         label,
         JavaWrapper.methodToJava(method)
