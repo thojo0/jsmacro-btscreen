@@ -1,4 +1,4 @@
-// Global
+// BEGIN : Globals
 function log(text) {
   const builder = Chat.createTextBuilder();
   builder.append("[");
@@ -59,8 +59,9 @@ function teleport(home) {
 }
 const config = require("./config.js");
 const sections = require("./sections.js");
+// END : Globals
 
-// Expose Things
+// BEGIN : Expose Things
 event.stopListener = JavaWrapper.methodToJava(() => {
   Object.values(event.getObject("stopObject")).forEach((s) => s());
 });
@@ -73,7 +74,10 @@ if (btIsActive()) {
 } else {
   event.putString("status", state.idle);
 }
+// END : Expose Things
 
+
+// BEGIN : Screen Service
 const theScreen = Hud.createScreen("Baritone Selection Manager GUI", false);
 const draw2D = Hud.createDraw2D();
 
@@ -186,3 +190,4 @@ addStop("screen", () => {
 require("./Listener.js");
 
 event.putObject("screen", theScreen);
+// END : Screen Service
