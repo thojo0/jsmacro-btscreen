@@ -15,8 +15,8 @@ module.exports = (file, label = "Open " + FS.getName(file)) => {
       screen.addButton(
         xOffset,
         yOffset,
-        config.gui.component.width,
-        config.gui.component.height,
+        this.width,
+        this.height,
         1,
         label,
         JavaWrapper.methodToJava(method)

@@ -10,8 +10,8 @@ module.exports = (preset) => {
       screen.addButton(
         xOffset,
         yOffset,
-        config.gui.component.width,
-        config.gui.component.height,
+        this.width,
+        this.height,
         1,
         "Preset: " + preset,
         JavaWrapper.methodToJava(method)

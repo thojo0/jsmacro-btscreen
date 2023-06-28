@@ -20,8 +20,8 @@ module.exports = () => {
       screen.addButton(
         xOffset,
         yOffset,
-        config.gui.component.width,
-        config.gui.component.height,
+        this.width,
+        this.height,
         1,
         "Restart Service",
         JavaWrapper.methodToJava(method(screen))
