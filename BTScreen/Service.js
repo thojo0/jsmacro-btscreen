@@ -1,4 +1,4 @@
-// Global
+// BEGIN : Globals
 function log(text) {
   const builder = Chat.createTextBuilder();
   builder.append("[");
@@ -59,8 +59,9 @@ function teleport(home) {
 }
 const config = require("./config.js");
 const sections = require("./sections.js");
+// END : Globals
 
-// Expose Things
+// BEGIN : Expose Things
 event.stopListener = JavaWrapper.methodToJava(() => {
   Object.values(event.getObject("stopObject")).forEach((s) => s());
 });
@@ -73,66 +74,30 @@ if (btIsActive()) {
 } else {
   event.putString("status", state.idle);
 }
+// END : Expose Things
 
+
+// BEGIN : Screen Service
 const theScreen = Hud.createScreen("Baritone Selection Manager GUI", false);
 const draw2D = Hud.createDraw2D();
 
 /**
  * Gets the simple section group data and turns it into final components
  */
+const commandButton = require("./components/commandButton.js");
 function setSectionComponents(section) {
   section.groups = section.groups.map((group) => {
     return group.map((component) => {
-      const button = {
-        width: config.gui.component.width,
-        height: config.gui.component.height,
-      };
-      let command;
-      let title;
       switch (component.constructor.name) {
         case "String":
-          if (!component) {
-            button.type = "empty";
-            button.render = function (screen, xOffset, yOffset) {};
-            return button;
-          } else {
-            button.type = "commandButton";
-            command = component;
-            title = component;
-          }
-          break;
+          return commandButton(component);
 
         case "Array":
-          button.type = "customTitleCommandButton";
-          command = component[0];
-          title = component[1];
-          break;
+          return commandButton(component[0], component[1]);
 
         default:
           return component;
       }
-      function method() {
-        switch (command[0]) {
-          case "/":
-            Chat.say(command);
-            break;
-          default:
-            btExecute(command);
-            break;
-        }
-      }
-      button.render = function (screen, xOffset, yOffset) {
-        screen.addButton(
-          xOffset,
-          yOffset,
-          config.gui.component.width,
-          config.gui.component.height,
-          1,
-          title,
-          JavaWrapper.methodToJavaAsync(method)
-        );
-      };
-      return button;
     });
   });
 }
@@ -225,3 +190,4 @@ addStop("screen", () => {
 require("./Listener.js");
 
 event.putObject("screen", theScreen);
+// END : Screen Service
