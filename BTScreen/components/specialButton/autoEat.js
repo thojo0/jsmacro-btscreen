@@ -1,5 +1,4 @@
 // Assumes food is held in the offhand
-// Could be more robust, good enough for now
 // Right clicks and holds if food level is below threshhold
 // Likely to produce undesirable results if you end up right clicking something. Be warned.
 // Credits: https://discord.com/channels/732004268948586545/1097289256839434393/1097677403213533185
