@@ -88,6 +88,7 @@ function startTickListener() {
               event.putString("status", state.mine);
             }
           }
+          break;
       }
     })
   );

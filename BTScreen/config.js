@@ -9,8 +9,8 @@ module.exports = {
   },
   // autoEat settings
   autoEat: {
-    hold: 33, // time to hold right click to eat (in ticks)
-    level: 16, // when food level is less -> eat
+    maxHold: 2500, // maximum time to hold right click (in milliseconds)
+    level: null, // when food level is less -> eat (null = automatic)
   },
   // autoRepair settings
   autoRepair: {
@@ -26,7 +26,7 @@ module.exports = {
   sleep: {
     tp: 2000, // after teleports (in milliseconds)
     interact: 1, // between block interactions (in ticks)
-    check: 10, // between loop-checks (in ticks)
+    check: 5, // between loop-checks (in ticks)
     get hit() {
       // between monster-hits (in milliseconds)
       const sleep = 1500;

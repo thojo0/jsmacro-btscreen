@@ -4,6 +4,26 @@
 // Credits: https://discord.com/channels/732004268948586545/1097289256839434393/1097677403213533185
 const label = "AutoEat";
 
+function getOffhand(inv = Player.openInventory()) {
+  const invMap = inv.getMap();
+  const offhand = inv.getSlot(invMap.offhand[0]);
+  return offhand;
+}
+function getHunger(itemStack) {
+  return itemStack.getRaw().method_7909().method_19264().method_19230();
+}
+function eat() {
+  const getFoodLevel = Player.getPlayer().getFoodLevel;
+  const foodLevel = getFoodLevel();
+  const stopTime = Time.time() + config.autoEat.maxHold;
+  log("Eating");
+  KeyBind.key("key.mouse.right", true);
+  while (foodLevel === getFoodLevel() && stopTime > Time.time()) {
+    Client.waitTick(config.sleep.check);
+  }
+  KeyBind.key("key.mouse.right", false);
+}
+
 let hungerListener = null;
 function startHungerListener() {
   hungerListener = JsMacros.on(
@@ -11,12 +31,19 @@ function startHungerListener() {
     JavaWrapper.methodToJava((e) => {
       switch (event.getString("status")) {
         case state.mine:
-          if (e.foodLevel < config.autoEat.level) {
-            log("Eating");
-            KeyBind.key("key.mouse.right", true);
-            Client.waitTick(config.autoEat.hold);
-            KeyBind.key("key.mouse.right", false);
+          const offhand = getOffhand();
+          if (offhand.isFood()) {
+            let minLevel = config.autoEat.level;
+            if (minLevel === null) {
+              minLevel = 21 - getHunger(offhand);
+            }
+            if (minLevel < 21) {
+              if (e.foodLevel < minLevel) {
+                eat(offhand);
+              }
+            }
           }
+          break;
       }
     })
   );
