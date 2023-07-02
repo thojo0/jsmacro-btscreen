@@ -19,12 +19,14 @@ function switchToSword(inv = Player.openInventory()) {
 function switchBack(inv = Player.openInventory()) {
   const invMap = inv.getMap();
   const nbt = inv.getSlot(invMap.offhand[0]).getNBT();
-  if (nbt.has("Enchantments")) {
-    const enchants = nbt.get("Enchantments");
-    for (let i = 0; i < enchants.length(); i++)
-      if (enchants.get(i).get("id").asString() === "minecraft:mending") {
-        inv.swapHotbar(invMap.offhand[0], prevHotbarSlot);
-      }
+  if (nbt.isCompound()) {
+    if (nbt.has("Enchantments")) {
+      const enchants = nbt.get("Enchantments");
+      for (let i = 0; i < enchants.length(); i++)
+        if (enchants.get(i).get("id").asString() === "minecraft:mending") {
+          inv.swapHotbar(invMap.offhand[0], prevHotbarSlot);
+        }
+    }
   }
   inv.setSelectedHotbarSlotIndex(prevHotbarSlot);
 }
