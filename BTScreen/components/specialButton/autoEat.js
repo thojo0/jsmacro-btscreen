@@ -17,7 +17,9 @@ function switchHands(inv = Player.openInventory()) {
   const invMap = inv.getMap();
   inv.swapHotbar(invMap.offhand[0], inv.getSelectedHotbarSlotIndex());
 }
-const getFoodLevel = Player.getPlayer().getFoodLevel;
+function getFoodLevel() {
+  return Player.getPlayer().getFoodLevel();
+}
 function eat() {
   const foodLevel = getFoodLevel();
   const stopTime = Time.time() + config.autoEat.maxHold;
