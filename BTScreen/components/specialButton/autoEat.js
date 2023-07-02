@@ -45,22 +45,24 @@ function startHungerListener() {
               minLevel = 21 - getHunger(offhand);
             }
             if (minLevel < 21) {
-              if (config.autoEat.saveMode) {
-                event.putString("status", state.eat);
-                btExecute("pause");
-                Time.sleep(1);
-                switchHands(inv);
-              } else {
-                log("Eating");
-              }
-              while (getFoodLevel() < minLevel) {
-                eat();
-              }
-              if (config.autoEat.saveMode) {
-                switchHands(inv);
-                btExecute("resume");
-                Time.sleep(1);
-                event.putString("status", state.mine);
+              if (e.foodLevel < minLevel) {
+                if (config.autoEat.saveMode) {
+                  event.putString("status", state.eat);
+                  btExecute("pause");
+                  Time.sleep(1);
+                  switchHands(inv);
+                } else {
+                  log("Eating");
+                }
+                while (getFoodLevel() < minLevel) {
+                  eat();
+                }
+                if (config.autoEat.saveMode) {
+                  switchHands(inv);
+                  btExecute("resume");
+                  Time.sleep(1);
+                  event.putString("status", state.mine);
+                }
               }
             }
           }
