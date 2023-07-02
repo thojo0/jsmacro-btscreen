@@ -10,85 +10,87 @@ function startTickListener() {
   tickListener = JsMacros.on(
     "Tick",
     JavaWrapper.methodToJava(() => {
-      switch (event.getString("status")) {
-        case state.mine:
-          let daytime = getDaytime();
-          if (pause) {
-            if (0 < daytime && daytime < 12600) {
-              pause = false;
-            }
-          } else {
-            if (12600 < daytime && daytime < 23000) {
-              event.putString("status", state.sleep);
-              btExecute("pause");
-              Time.sleep(1);
-              const prevDim = World.getDimension();
-              Chat.say(config.home.setcmd + " " + config.home.mine, true);
-              teleport("bed");
-              if (
-                config.autoSleep.dimensionCheck &&
-                prevDim !== World.getDimension()
-              ) {
-                log("Error: Dimention not the same after teleport");
-                stopTickListener();
-              } else {
-                const playerEntity = Player.getPlayer();
-                const pos = playerEntity.getBlockPos();
-                playerEntity.interactBlock(
-                  pos.getX() - 1,
-                  pos.getY(),
-                  pos.getZ(),
-                  1,
-                  false,
-                  true
-                );
-                Client.waitTick(config.sleep.interact);
-                playerEntity.interactBlock(
-                  pos.getX() + 1,
-                  pos.getY(),
-                  pos.getZ(),
-                  1,
-                  false,
-                  true
-                );
-                Client.waitTick(config.sleep.interact);
-                playerEntity.interactBlock(
-                  pos.getX(),
-                  pos.getY(),
-                  pos.getZ() - 1,
-                  1,
-                  false,
-                  true
-                );
-                Client.waitTick(config.sleep.interact);
-                playerEntity.interactBlock(
-                  pos.getX(),
-                  pos.getY(),
-                  pos.getZ() + 1,
-                  1,
-                  false,
-                  true
-                );
-                Client.waitTick(config.sleep.check);
-                while (playerEntity.isSleeping()) {
-                  if (playerEntity.isSleepingLongEnough()) {
-                    const screen = Hud.getOpenScreen();
-                    if (screen) screen.close();
-                  }
-                  Client.waitTick(config.sleep.check);
-                }
-                daytime = getDaytime();
-                if (12600 < daytime && daytime < 23000) {
-                  pause = true;
-                }
+      if (World.isWorldLoaded()) {
+        switch (event.getString("status")) {
+          case state.mine:
+            let daytime = getDaytime();
+            if (pause) {
+              if (0 < daytime && daytime < 12600) {
+                pause = false;
               }
-              teleport("mine");
-              btExecute("resume");
-              Time.sleep(1);
-              event.putString("status", state.mine);
+            } else {
+              if (12600 < daytime && daytime < 23000) {
+                event.putString("status", state.sleep);
+                btExecute("pause");
+                Time.sleep(1);
+                const prevDim = World.getDimension();
+                Chat.say(config.home.setcmd + " " + config.home.mine, true);
+                teleport("bed");
+                if (
+                  config.autoSleep.dimensionCheck &&
+                  prevDim !== World.getDimension()
+                ) {
+                  log("Error: Dimention not the same after teleport");
+                  stopTickListener();
+                } else {
+                  const playerEntity = Player.getPlayer();
+                  const pos = playerEntity.getBlockPos();
+                  playerEntity.interactBlock(
+                    pos.getX() - 1,
+                    pos.getY(),
+                    pos.getZ(),
+                    1,
+                    false,
+                    true
+                  );
+                  Client.waitTick(config.sleep.interact);
+                  playerEntity.interactBlock(
+                    pos.getX() + 1,
+                    pos.getY(),
+                    pos.getZ(),
+                    1,
+                    false,
+                    true
+                  );
+                  Client.waitTick(config.sleep.interact);
+                  playerEntity.interactBlock(
+                    pos.getX(),
+                    pos.getY(),
+                    pos.getZ() - 1,
+                    1,
+                    false,
+                    true
+                  );
+                  Client.waitTick(config.sleep.interact);
+                  playerEntity.interactBlock(
+                    pos.getX(),
+                    pos.getY(),
+                    pos.getZ() + 1,
+                    1,
+                    false,
+                    true
+                  );
+                  Client.waitTick(config.sleep.check);
+                  while (playerEntity.isSleeping()) {
+                    if (playerEntity.isSleepingLongEnough()) {
+                      const screen = Hud.getOpenScreen();
+                      if (screen) screen.close();
+                    }
+                    Client.waitTick(config.sleep.check);
+                  }
+                  daytime = getDaytime();
+                  if (12600 < daytime && daytime < 23000) {
+                    pause = true;
+                  }
+                }
+                teleport("mine");
+                btExecute("resume");
+                Time.sleep(1);
+                event.putString("status", state.mine);
+              }
             }
-          }
-          break;
+            break;
+        }
       }
     })
   );
