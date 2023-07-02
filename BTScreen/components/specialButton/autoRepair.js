@@ -13,8 +13,9 @@ function switchToSword(inv = Player.openInventory()) {
       break;
     }
   }
-  if (prevHotbarSlot !== inv.getSelectedHotbarSlotIndex())
+  if (prevHotbarSlot !== inv.getSelectedHotbarSlotIndex()) {
     inv.swapHotbar(invMap.offhand[0], prevHotbarSlot);
+  }
 }
 function switchBack(inv = Player.openInventory()) {
   const invMap = inv.getMap();
@@ -22,10 +23,11 @@ function switchBack(inv = Player.openInventory()) {
   if (nbt.isCompound()) {
     if (nbt.has("Enchantments")) {
       const enchants = nbt.get("Enchantments");
-      for (let i = 0; i < enchants.length(); i++)
+      for (let i = 0; i < enchants.length(); i++) {
         if (enchants.get(i).get("id").asString() === "minecraft:mending") {
           inv.swapHotbar(invMap.offhand[0], prevHotbarSlot);
         }
+      }
     }
   }
   inv.setSelectedHotbarSlotIndex(prevHotbarSlot);
@@ -73,6 +75,7 @@ function startDamageListener() {
                         break hitLoop;
                       default:
                         JsMacros.waitForEvent(config.eventName);
+                        break;
                     }
                     Time.sleep(config.sleep.hit);
                   }
