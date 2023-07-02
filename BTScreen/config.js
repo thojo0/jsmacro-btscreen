@@ -11,6 +11,7 @@ module.exports = {
   autoEat: {
     maxHold: 2500, // maximum time to hold right click (in milliseconds)
     level: null, // when food level is less -> eat (null = automatic)
+    saveMode: false, // pause baritone while eating and switch hand
   },
   // autoRepair settings
   autoRepair: {
