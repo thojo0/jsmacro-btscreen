@@ -23,11 +23,15 @@ function delStop(name, exec) {
   delete stopObject[name];
   event.putObject("stopObject", stopObject);
 }
-function toInt(a) {
-  return Math.round(a);
+function toInt(a, round) {
+  if (round) {
+    return Math.round(a);
+  } else {
+    return Math.floor(a);
+  }
 }
 function random(range) {
-  return toInt(Math.random() * range);
+  return toInt(Math.random() * range, true);
 }
 const baritone = Java.type("baritone.api.BaritoneAPI")
   .getProvider()
@@ -75,7 +79,6 @@ if (btIsActive()) {
   event.putString("status", state.idle);
 }
 // END : Expose Things
-
 
 // BEGIN : Screen Service
 const theScreen = Hud.createScreen("Baritone Selection Manager GUI", false);

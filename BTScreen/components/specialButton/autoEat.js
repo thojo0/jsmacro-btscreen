@@ -23,11 +23,11 @@ function getFoodLevel() {
 function eat() {
   const foodLevel = getFoodLevel();
   const stopTime = Time.time() + config.autoEat.maxHold;
-  KeyBind.key("key.mouse.right", true);
+  KeyBind.keyBind("key.use", true);
   while (foodLevel === getFoodLevel() && stopTime > Time.time()) {
     Client.waitTick(config.sleep.check);
   }
-  KeyBind.key("key.mouse.right", false);
+  KeyBind.keyBind("key.use", false);
 }
 
 let hungerListener = null;
