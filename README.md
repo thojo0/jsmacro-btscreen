@@ -19,7 +19,8 @@ Baritone Selection Manager GUI (BTScreen) for the [JsMacro](https://github.com/J
 1. Install [JsMacro](https://github.com/JsMacros/JsMacros/releases) mod for Fabric or Forge.
 2. Install [Baritone-Api](https://github.com/cabaletta/baritone/releases) mod for Fabric or Forge.
 3. Locate the Macros folder (normaly `.minecraft/config/jsMacros/Macros`) where your JsMacros is looking for the js files to execute (can be done through jsMacros GUI).
-4. Paste the `BTScreen` folder of this repository inside that folder. Or clone this folder instead. ([zip download](https://github.com/thojo0/jsmacro-btscreen/archive/refs/heads/master.zip))
+4. Create a new folder named `BTScreen`
+4. Paste everything of this repository inside that folder. Or clone this folder instead. ([zip download](https://github.com/thojo0/jsmacro-btscreen/archive/refs/heads/master.zip))
 5. Add a new Service, named `BTScreen` and linked to the file `BTScreen/Service.js`, inside your JsMacros GUI (go to Controls to see how to open your JsMacro GUI)
    Don't forget to `Enable` and `Start` the service.
 6. Attach the `BTScreen/Open.js` to the key that you would like to open the screen with.
