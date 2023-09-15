@@ -125,6 +125,8 @@ module.exports = {
       },
     },
   },
+
+  // GUI Settings
   gui: {
     titleHeight: 30,
     groupSpacing: 5,
@@ -133,5 +135,6 @@ module.exports = {
       height: 20,
     },
   },
+  // Extra special settings (Only modify if you know what you're doing)
   eventName: "BTScreenStatusChange",
 };
