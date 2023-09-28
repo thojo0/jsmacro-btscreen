@@ -7,7 +7,7 @@ module.exports = (commands, defaultText = "") => {
   }
   function commandMethod(command) {
     return () => {
-      const finalCommand = [command, blocks].join(" ");
+      const finalCommand = `${command} ${blocks}`;
       btExecute(finalCommand);
     };
   }

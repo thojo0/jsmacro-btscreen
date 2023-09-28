@@ -24,7 +24,7 @@ function startTickListener() {
                 btExecute("pause");
                 Time.sleep(1);
                 const prevDim = World.getDimension();
-                Chat.say(config.home.setcmd + " " + config.home.mine, true);
+                Chat.say(`${config.home.setcmd} ${config.home.mine}`, true);
                 teleport("bed");
                 if (
                   config.autoSleep.dimensionCheck &&
@@ -98,11 +98,11 @@ function startTickListener() {
     JsMacros.off(tickListener);
     tickListener = null;
   });
-  log(label + " enabled");
+  log(`${label} enabled`);
 }
 function stopTickListener() {
   delStop(label, true);
-  log(label + " disabled");
+  log(`${label} disabled`);
 }
 function getText() {
   const builder = Chat.createTextBuilder().append(label);

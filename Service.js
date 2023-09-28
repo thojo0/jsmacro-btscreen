@@ -49,14 +49,14 @@ function setBtPreset(preset) {
     if (value.constructor.name === "Array") {
       value = value.join();
     }
-    btExecute(["set", key, value].join(" "));
+    btExecute(`set ${key} ${value}`);
   }
 }
 function teleport(home) {
   Chat.say(
     config.home[home].startsWith("/")
       ? config.home[home]
-      : config.home.getcmd + " " + config.home[home],
+      : `${config.home.getcmd} ${config.home[home]}`,
     true
   );
   Time.sleep(config.sleep.tp);

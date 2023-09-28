@@ -4,11 +4,7 @@ module.exports = () => {
       screen.close();
       JsMacros.runScript(
         "js",
-        [
-          "JsMacros.getServiceManager().restartService(",
-          event.serviceName,
-          ")",
-        ].join('"')
+        `JsMacros.getServiceManager().restartService("${event.serviceName}")`
       );
     };
   }

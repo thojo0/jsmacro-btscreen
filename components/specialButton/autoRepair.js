@@ -63,7 +63,7 @@ function startDamageListener() {
                   btExecute("pause");
                   Time.sleep(1);
                   switchToSword();
-                  Chat.say(config.home.setcmd + " " + config.home.mine, true);
+                  Chat.say(`${config.home.setcmd} ${config.home.mine}`, true);
                   teleport("xp");
                   running = true;
                   hitLoop: while (running) {
@@ -100,11 +100,11 @@ function startDamageListener() {
     JsMacros.off(damageListener);
     damageListener = null;
   });
-  log(label + " enabled");
+  log(`${label} enabled`);
 }
 function stopDamageListener() {
   delStop(label, true);
-  log(label + " disabled");
+  log(`${label} disabled`);
 }
 function getText() {
   const builder = Chat.createTextBuilder().append(label);

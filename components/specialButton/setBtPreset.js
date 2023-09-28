@@ -13,7 +13,7 @@ module.exports = (preset) => {
         this.width,
         this.height,
         1,
-        "Preset: " + preset,
+        `Preset: ${preset}`,
         JavaWrapper.methodToJava(method)
       );
     },
