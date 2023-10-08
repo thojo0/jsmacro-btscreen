@@ -52,14 +52,21 @@ function setBtPreset(preset) {
     btExecute(`set ${key} ${value}`);
   }
 }
+let lastTeleport = "mine";
 function teleport(home) {
-  Chat.say(
-    config.home[home].startsWith("/")
-      ? config.home[home]
-      : `${config.home.getcmd} ${config.home[home]}`,
-    true
-  );
-  Time.sleep(config.sleep.tp);
+  if (config.home[lastTeleport] !== config.home[home]) {
+    if (lastTeleport === "mine") {
+      Chat.say(`${config.home.setcmd} ${config.home.mine}`, true);
+    }
+    Chat.say(
+      config.home[home].startsWith("/")
+        ? config.home[home]
+        : `${config.home.getcmd} ${config.home[home]}`,
+      true
+    );
+    Time.sleep(config.sleep.tp);
+  }
+  lastTeleport = home;
 }
 const config = require("./config.js");
 const sections = require("./sections.js");

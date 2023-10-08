@@ -7,16 +7,25 @@ module.exports = [
   {
     title: "Special",
     groups: [
-      [
-        home.mine.startsWith("/") ? home.mine : home.getcmd + " " + home.mine,
-        home.xp.startsWith("/") ? home.xp : home.getcmd + " " + home.xp,
-        home.bed.startsWith("/") ? home.bed : home.getcmd + " " + home.bed,
-      ],
+      (() => {
+        const arr = [];
+        ["mine", "xp", "bed", "haste", "drop"].forEach((name) => {
+          const cmd = home[name].startsWith("/")
+            ? home[name]
+            : `${home.getcmd} ${home[name]}`;
+          if (!arr.includes(cmd)) {
+            arr.push(cmd);
+          }
+        });
+        return arr;
+      })(),
       [
         specialButton.stop(),
         specialButton.autoSleep(),
         specialButton.autoRepair(),
         specialButton.autoEat(),
+        specialButton.autoHaste(),
+        specialButton.autoDrop(),
       ],
       [
         specialButton.setBtPreset("default"),

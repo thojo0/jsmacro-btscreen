@@ -24,7 +24,6 @@ function startTickListener() {
                 btExecute("pause");
                 Time.sleep(1);
                 const prevDim = World.getDimension();
-                Chat.say(`${config.home.setcmd} ${config.home.mine}`, true);
                 teleport("bed");
                 if (
                   config.autoSleep.dimensionCheck &&
@@ -33,6 +32,7 @@ function startTickListener() {
                   log("Error: Dimention not the same after teleport");
                   stopTickListener();
                 } else {
+                  event.getObject("AutoDropIntegration")("bed");
                   const playerEntity = Player.getPlayer();
                   const pos = playerEntity.getBlockPos();
                   playerEntity.interactBlock(

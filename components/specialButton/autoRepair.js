@@ -63,8 +63,8 @@ function startDamageListener() {
                   btExecute("pause");
                   Time.sleep(1);
                   switchToSword();
-                  Chat.say(`${config.home.setcmd} ${config.home.mine}`, true);
                   teleport("xp");
+                  event.getObject("AutoDropIntegration")("xp");
                   running = true;
                   hitLoop: while (running) {
                     switch (event.getString("status")) {

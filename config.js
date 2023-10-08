@@ -5,6 +5,8 @@ module.exports = {
     getcmd: "/home",
     mine: "tmp",
     xp: "xp", // begins with "/" -> getcmd will not be put infront
+    haste: "haste", // begins with "/" -> getcmd will not be put infront
+    drop: "drop", // begins with "/" -> getcmd will not be put infront
     bed: "bed", // begins with "/" -> getcmd will not be put infront
   },
   // autoEat settings
@@ -23,10 +25,17 @@ module.exports = {
   autoSleep: {
     dimensionCheck: true, // check if in same dimention after teleport else deactivate
   },
+  // autoDrop settings
+  autoDrop: {
+    // enable integration with other auto tools
+    // if homes are the same then he will drop on the other events too
+    integration: true,
+  },
   // Sleep/Wait timings (time to wait ...)
   sleep: {
     tp: 2000, // after teleports (in milliseconds)
     interact: 1, // between block interactions (in ticks)
+    drop: 5, // after item drop (in ticks)
     check: 5, // between loop-checks (in ticks)
     get hit() {
       // between monster-hits (in milliseconds)
