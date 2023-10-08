@@ -1,4 +1,5 @@
 // BEGIN : Globals
+const config = require("./config.js");
 function log(text) {
   const builder = Chat.createTextBuilder();
   builder.append("[");
@@ -33,6 +34,8 @@ function toInt(a, round) {
 function random(range) {
   return toInt(Math.random() * range, true);
 }
+const statusEvent = JsMacros.createCustomEvent(config.eventName);
+statusEvent.registerEvent();
 const baritone = Java.type("baritone.api.BaritoneAPI")
   .getProvider()
   .getPrimaryBaritone();
@@ -68,7 +71,6 @@ function teleport(home) {
   }
   lastTeleport = home;
 }
-const config = require("./config.js");
 const sections = require("./sections.js");
 // END : Globals
 

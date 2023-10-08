@@ -27,8 +27,6 @@ listener.push(
   )
 );
 // BTScreenStateChange Event
-const stateEvent = JsMacros.createCustomEvent(config.eventName);
-stateEvent.registerEvent();
 let oldStatus = event.getString("status");
 listener.push(
   JsMacros.on(
@@ -36,9 +34,9 @@ listener.push(
     JavaWrapper.methodToJava(() => {
       const status = event.getString("status");
       if (oldStatus !== status) {
-        stateEvent.putString("status", status);
-        stateEvent.putString("oldStatus", oldStatus);
-        stateEvent.trigger();
+        statusEvent.putString("status", status);
+        statusEvent.putString("oldStatus", oldStatus);
+        statusEvent.trigger();
         oldStatus = status;
       }
     })
