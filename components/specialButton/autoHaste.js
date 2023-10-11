@@ -1,8 +1,12 @@
 state.haste = "Refreshing Haste";
 const label = "AutoHaste";
 
-function hasHaste() {
-  return Player.getPlayer().hasStatusEffect("minecraft:haste");
+function hasHaste(errorReturn = false) {
+  try {
+    return Player.getPlayer().hasStatusEffect("minecraft:haste");
+  } catch (e) {
+    return errorReturn;
+  }
 }
 let tickListener = null;
 function startTickListener() {
@@ -11,7 +15,7 @@ function startTickListener() {
     JavaWrapper.methodToJava(() => {
       switch (event.getString("status")) {
         case state.mine:
-          if (hasHaste()) {
+          if (hasHaste(true)) {
             break;
           }
           event.putString("status", state.haste);
