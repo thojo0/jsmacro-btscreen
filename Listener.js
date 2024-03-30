@@ -1,7 +1,7 @@
 const listener = [];
 // Baritone active? change status
 let oldBaritoneState = btIsActive();
-let changedStateTick = 0;  // fix for sometimes falsely trigger
+let changedStateTick = 0; // fix for sometimes falsely trigger
 listener.push(
   JsMacros.on(
     "Tick",
@@ -39,6 +39,18 @@ listener.push(
         statusEvent.trigger();
         oldStatus = status;
       }
+    })
+  )
+);
+// AutoRestart
+listener.push(
+  JsMacros.on(
+    "JoinServer",
+    JavaWrapper.methodToJava(() => {
+      JsMacros.runScript(
+        "js",
+        `JsMacros.getServiceManager().restartService("${event.serviceName}")`
+      );
     })
   )
 );
