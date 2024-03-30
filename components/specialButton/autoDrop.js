@@ -41,15 +41,11 @@ function startEffectListener() {
           if (Player.openInventory().findFreeInventorySlot() !== -1) {
             break;
           }
-          event.putString("status", state.drop);
-          btExecute("pause");
-          Time.sleep(1);
+          btPause("drop");
           teleport("drop");
           dropSlots();
           teleport("mine");
-          btExecute("resume");
-          Time.sleep(1);
-          event.putString("status", state.mine);
+          btResume();
           break;
       }
     })

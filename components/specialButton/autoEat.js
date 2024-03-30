@@ -47,9 +47,7 @@ function startHungerListener() {
             if (minLevel < 21) {
               if (e.foodLevel < minLevel) {
                 if (config.autoEat.saveMode) {
-                  event.putString("status", state.eat);
-                  btExecute("pause");
-                  Time.sleep(1);
+                  btPause("eat");
                   switchHands(inv);
                 } else {
                   log("Eating");
@@ -59,9 +57,7 @@ function startHungerListener() {
                 }
                 if (config.autoEat.saveMode) {
                   switchHands(inv);
-                  btExecute("resume");
-                  Time.sleep(1);
-                  event.putString("status", state.mine);
+                  btResume();
                 }
               }
             }

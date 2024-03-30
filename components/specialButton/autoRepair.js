@@ -58,10 +58,8 @@ function startDamageListener() {
                   enchantments.get(i).get("id").asString() ===
                   "minecraft:mending"
                 ) {
-                  event.putString("status", state.repair);
+                  btPause("repair");
                   item = e.item;
-                  btExecute("pause");
-                  Time.sleep(1);
                   switchToSword();
                   teleport("xp");
                   event.getObject("AutoDropIntegration")("xp");
@@ -84,9 +82,7 @@ function startDamageListener() {
                     running = false;
                   } else {
                     teleport("mine");
-                    btExecute("resume");
-                    Time.sleep(1);
-                    event.putString("status", state.mine);
+                    btResume();
                   }
                 }
               }

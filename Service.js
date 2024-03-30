@@ -55,6 +55,23 @@ function setBtPreset(preset) {
     btExecute(`set ${key} ${value}`);
   }
 }
+let pauseStatus = null;
+function btPause(status) {
+  event.putString("status", state[status]);
+  pauseStatus = state[status];
+  btExecute("pause");
+  Time.sleep(1);
+}
+function btResume() {
+  if (event.getString("status") !== state[pauseStatus]) {
+    return false;
+  }
+  btExecute("resume");
+  Time.sleep(1);
+  event.putString("status", state.mine);
+  pauseStatus = null;
+  return true;
+}
 let lastTeleport = "mine";
 function teleport(home) {
   if (config.home[lastTeleport] !== config.home[home]) {
@@ -119,7 +136,7 @@ function setSectionComponents(section) {
  * in each group.
  *
  * @info there is a negative groupSpacing value in the initial reducer to remove the last spacing
- * */
+ */
 function setSectionDimensions(section) {
   let sectionDimensions = section.groups.reduce(
     (prev, curr, ind) => {

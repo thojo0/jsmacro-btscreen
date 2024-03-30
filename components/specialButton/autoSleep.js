@@ -20,9 +20,7 @@ function startTickListener() {
               }
             } else {
               if (12600 < daytime && daytime < 23000) {
-                event.putString("status", state.sleep);
-                btExecute("pause");
-                Time.sleep(1);
+                btPause("sleep");
                 const prevDim = World.getDimension();
                 teleport("bed");
                 if (
@@ -84,9 +82,7 @@ function startTickListener() {
                   }
                 }
                 teleport("mine");
-                btExecute("resume");
-                Time.sleep(1);
-                event.putString("status", state.mine);
+                btResume();
               }
             }
             break;

@@ -18,18 +18,14 @@ function startTickListener() {
           if (hasHaste(true)) {
             break;
           }
-          event.putString("status", state.haste);
-          btExecute("pause");
-          Time.sleep(1);
+          btPause("haste");
           teleport("haste");
           event.getObject("AutoDropIntegration")("haste");
           while (!hasHaste()) {
             JsMacros.waitForEvent("StatusEffectUpdate");
           }
           teleport("mine");
-          btExecute("resume");
-          Time.sleep(1);
-          event.putString("status", state.mine);
+          btResume();
           break;
       }
     })
