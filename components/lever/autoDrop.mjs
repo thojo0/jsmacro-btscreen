@@ -1,5 +1,17 @@
-state.drop = "Dropping Items";
+import * as Baritone from "../../Baritone.mjs";
+import {
+  addInit,
+  addStatus,
+  addStop,
+  delStop,
+  getStatus,
+  log,
+  tp,
+} from "../../Helper.mjs";
+import Config from "../../Config.mjs";
+
 const label = "AutoDrop";
+addStatus("drop", "Dropping Items");
 
 let slots;
 function dropSlots() {
@@ -7,7 +19,7 @@ function dropSlots() {
   slots.forEach((slot) => {
     inv.dropSlot(slot, true);
   });
-  Client.waitTick(config.sleep.drop);
+  Client.waitTick(Config.sleep.drop);
 }
 function setSlots() {
   const inv = Player.openInventory();
@@ -18,14 +30,17 @@ function setSlots() {
     }
   });
 }
-const eventListener = JsMacros.on(
-  config.eventName,
-  JavaWrapper.methodToJava((e) => {
-    if (e.getString("oldStatus") === state.idle) {
-      setSlots();
-    }
-  })
-);
+let eventListener = null;
+addInit(() => {
+  eventListener = JsMacros.on(
+    Config.eventName,
+    JavaWrapper.methodToJava((e) => {
+      if (e.getString("oldStatus") === getStatus("idle")) {
+        setSlots();
+      }
+    })
+  );
+});
 addStop(`${label}Event`, () => {
   JsMacros.off(eventListener);
 });
@@ -36,16 +51,16 @@ function startEffectListener() {
   pickupListener = JsMacros.on(
     "ItemPickup",
     JavaWrapper.methodToJava(() => {
-      switch (event.getString("status")) {
-        case state.mine:
+      switch (getStatus()) {
+        case getStatus("mine"):
           if (Player.openInventory().findFreeInventorySlot() !== -1) {
             break;
           }
-          btPause("drop");
-          teleport("drop");
+          Baritone.pause("drop");
+          tp("drop");
           dropSlots();
-          teleport("mine");
-          btResume();
+          tp("mine");
+          Baritone.resume();
           break;
       }
     })
@@ -72,16 +87,16 @@ function getText() {
 
 function dropIntegration(home) {
   if (
-    config.autoDrop.integration &&
+    Config.autoDrop.integration &&
     pickupListener !== null &&
-    config.home.drop === config.home[home]
+    Config.home.drop === Config.home[home]
   ) {
     dropSlots();
   }
 }
 event.putObject("AutoDropIntegration", dropIntegration);
 
-module.exports = () => {
+export default () => {
   let button;
   function method() {
     if (pickupListener === null) {
@@ -93,8 +108,8 @@ module.exports = () => {
   }
   return {
     type: "specialButton",
-    width: config.gui.component.width,
-    height: config.gui.component.height,
+    width: Config.gui.component.width,
+    height: Config.gui.component.height,
     render: function (screen, xOffset, yOffset) {
       button = screen.addButton(
         xOffset,

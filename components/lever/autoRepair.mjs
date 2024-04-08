@@ -1,5 +1,9 @@
-state.repair = "Repairing";
+import * as Baritone from "../../Baritone.mjs";
+import { addStatus, addStop, delStop, getStatus, log, tp } from "../../Helper.mjs";
+import Config from "../../Config.mjs";
+
 const label = "AutoRepair";
+addStatus("repair", "Repairing")
 
 let prevHotbarSlot = 0;
 function switchToSword(inv = Player.openInventory()) {
@@ -39,17 +43,17 @@ function startDamageListener() {
   damageListener = JsMacros.on(
     "ItemDamage",
     JavaWrapper.methodToJava((e) => {
-      switch (event.getString("status")) {
-        case state.repair:
+      switch (getStatus()) {
+        case getStatus("repair"):
           if (
             e.item.isItemEqualIgnoreDamage(item) &&
-            e.damage <= config.autoRepair.stop
+            e.damage <= Config.autoRepair.stop
           ) {
             running = false;
           }
           break;
-        case state.mine:
-          if (e.item.getMaxDamage() - e.damage <= config.autoRepair.start) {
+        case getStatus("mine"):
+          if (e.item.getMaxDamage() - e.damage <= Config.autoRepair.start) {
             const nbt = e.item.getNBT();
             if (nbt.has("Enchantments")) {
               const enchantments = nbt.get("Enchantments");
@@ -58,31 +62,31 @@ function startDamageListener() {
                   enchantments.get(i).get("id").asString() ===
                   "minecraft:mending"
                 ) {
-                  btPause("repair");
+                  Baritone.pause("repair");
                   item = e.item;
                   switchToSword();
-                  teleport("xp");
+                  tp("xp");
                   event.getObject("AutoDropIntegration")("xp");
                   running = true;
                   hitLoop: while (running) {
-                    switch (event.getString("status")) {
-                      case state.repair:
+                    switch (getStatus()) {
+                      case getStatus("repair"):
                         Player.getPlayer().attack();
                         break;
-                      case state.idle:
+                      case getStatus("idle"):
                         break hitLoop;
                       default:
-                        JsMacros.waitForEvent(config.eventName);
+                        JsMacros.waitForEvent(Config.eventName);
                         break;
                     }
-                    Time.sleep(config.sleep.hit);
+                    Time.sleep(Config.sleep.hit);
                   }
                   switchBack();
                   if (running) {
                     running = false;
                   } else {
-                    teleport("mine");
-                    btResume();
+                    tp("mine");
+                    Baritone.resume();
                   }
                 }
               }
@@ -112,7 +116,7 @@ function getText() {
   return builder.build();
 }
 
-module.exports = () => {
+export default () => {
   let button;
   function method() {
     if (damageListener === null) {
@@ -124,8 +128,8 @@ module.exports = () => {
   }
   return {
     type: "specialButton",
-    width: config.gui.component.width,
-    height: config.gui.component.height,
+    width: Config.gui.component.width,
+    height: Config.gui.component.height,
     render: function (screen, xOffset, yOffset) {
       button = screen.addButton(
         xOffset,

@@ -1,5 +1,9 @@
-state.sleep = "Sleeping";
+import * as Baritone from "../../Baritone.mjs";
+import { addStatus, addStop, delStop, getStatus, log, tp } from "../../Helper.mjs";
+import Config from "../../Config.mjs";
+
 const label = "AutoSleep";
+addStatus("sleep", "Sleeping")
 
 function getDaytime() {
   return World.getTimeOfDay() % 24000;
@@ -11,8 +15,8 @@ function startTickListener() {
     "Tick",
     JavaWrapper.methodToJava(() => {
       if (World.isWorldLoaded()) {
-        switch (event.getString("status")) {
-          case state.mine:
+        switch (getStatus()) {
+          case getStatus("mine"):
             let daytime = getDaytime();
             if (pause) {
               if (0 < daytime && daytime < 12600) {
@@ -20,11 +24,11 @@ function startTickListener() {
               }
             } else {
               if (12600 < daytime && daytime < 23000) {
-                btPause("sleep");
+                Baritone.pause("sleep");
                 const prevDim = World.getDimension();
-                teleport("bed");
+                tp("bed");
                 if (
-                  config.autoSleep.dimensionCheck &&
+                  Config.autoSleep.dimensionCheck &&
                   prevDim !== World.getDimension()
                 ) {
                   log("Error: Dimention not the same after teleport");
@@ -41,7 +45,7 @@ function startTickListener() {
                     false,
                     true
                   );
-                  Client.waitTick(config.sleep.interact);
+                  Client.waitTick(Config.sleep.interact);
                   playerEntity.interactBlock(
                     pos.getX() + 1,
                     pos.getY(),
@@ -50,7 +54,7 @@ function startTickListener() {
                     false,
                     true
                   );
-                  Client.waitTick(config.sleep.interact);
+                  Client.waitTick(Config.sleep.interact);
                   playerEntity.interactBlock(
                     pos.getX(),
                     pos.getY(),
@@ -59,7 +63,7 @@ function startTickListener() {
                     false,
                     true
                   );
-                  Client.waitTick(config.sleep.interact);
+                  Client.waitTick(Config.sleep.interact);
                   playerEntity.interactBlock(
                     pos.getX(),
                     pos.getY(),
@@ -68,21 +72,21 @@ function startTickListener() {
                     false,
                     true
                   );
-                  Client.waitTick(config.sleep.check);
+                  Client.waitTick(Config.sleep.check);
                   while (playerEntity.isSleeping()) {
                     if (playerEntity.isSleepingLongEnough()) {
                       const screen = Hud.getOpenScreen();
                       if (screen) screen.close();
                     }
-                    Client.waitTick(config.sleep.check);
+                    Client.waitTick(Config.sleep.check);
                   }
                   daytime = getDaytime();
                   if (12600 < daytime && daytime < 23000) {
                     pause = true;
                   }
                 }
-                teleport("mine");
-                btResume();
+                tp("mine");
+                Baritone.resume();
               }
             }
             break;
@@ -110,7 +114,7 @@ function getText() {
   return builder.build();
 }
 
-module.exports = () => {
+export default () => {
   let button;
   function method() {
     if (tickListener === null) {
@@ -122,8 +126,8 @@ module.exports = () => {
   }
   return {
     type: "specialButton",
-    width: config.gui.component.width,
-    height: config.gui.component.height,
+    width: Config.gui.component.width,
+    height: Config.gui.component.height,
     render: function (screen, xOffset, yOffset) {
       button = screen.addButton(
         xOffset,

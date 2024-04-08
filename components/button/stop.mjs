@@ -1,3 +1,7 @@
+import * as Baritone from "../../Baritone.mjs";
+import { random } from "../../Helper.mjs";
+import Config from "../../Config.mjs";
+
 function getText() {
   const builder = Chat.createTextBuilder();
   for (let l = 0; l < 3; l++) {
@@ -16,14 +20,14 @@ function getText() {
   return builder.build();
 }
 
-module.exports = () => {
+export default () => {
   function method() {
-    btExecute("stop");
+    Baritone.execute("stop");
   }
   return {
     type: "specialButton",
-    width: config.gui.component.width,
-    height: config.gui.component.height,
+    width: Config.gui.component.width,
+    height: Config.gui.component.height,
     render: function (screen, xOffset, yOffset) {
       screen
         .addButton(

@@ -1,4 +1,6 @@
-module.exports = {
+import { random } from "./Helper.mjs";
+
+export default {
   // home system settings for teleport
   home: {
     setcmd: "/sethome",

@@ -1,9 +1,14 @@
 // Assumes food is held in the offhand
 // Right clicks and holds if food level is below threshhold
 // Likely to produce undesirable results if you end up right clicking something. Be warned.
+
+import * as Baritone from "../../Baritone.mjs";
+import { addStatus, addStop, delStop, getStatus, log } from "../../Helper.mjs";
+import Config from "../../Config.mjs";
+
 // Inspired by: https://discord.com/channels/732004268948586545/1097289256839434393/1097677403213533185
-state.eat = "Eating";
 const label = "AutoEat";
+addStatus("eat", "Eating")
 
 function getOffhand(inv = Player.openInventory()) {
   const invMap = inv.getMap();
@@ -22,10 +27,10 @@ function getFoodLevel() {
 }
 function eat() {
   const foodLevel = getFoodLevel();
-  const stopTime = Time.time() + config.autoEat.maxHold;
+  const stopTime = Time.time() + Config.autoEat.maxHold;
   KeyBind.keyBind("key.use", true);
   while (foodLevel === getFoodLevel() && stopTime > Time.time()) {
-    Client.waitTick(config.sleep.check);
+    Client.waitTick(Config.sleep.check);
   }
   KeyBind.keyBind("key.use", false);
 }
@@ -35,19 +40,19 @@ function startHungerListener() {
   hungerListener = JsMacros.on(
     "HungerChange",
     JavaWrapper.methodToJava((e) => {
-      switch (event.getString("status")) {
-        case state.mine:
+      switch (getStatus()) {
+        case getStatus("mine"):
           const inv = Player.openInventory();
           const offhand = getOffhand(inv);
           if (offhand.isFood()) {
-            let minLevel = config.autoEat.level;
+            let minLevel = Config.autoEat.level;
             if (minLevel === null) {
               minLevel = 21 - getHunger(offhand);
             }
             if (minLevel < 21) {
               if (e.foodLevel < minLevel) {
-                if (config.autoEat.saveMode) {
-                  btPause("eat");
+                if (Config.autoEat.saveMode) {
+                  Baritone.pause("eat");
                   switchHands(inv);
                 } else {
                   log("Eating");
@@ -55,9 +60,9 @@ function startHungerListener() {
                 while (getFoodLevel() < minLevel) {
                   eat();
                 }
-                if (config.autoEat.saveMode) {
+                if (Config.autoEat.saveMode) {
                   switchHands(inv);
-                  btResume();
+                  Baritone.resume();
                 }
               }
             }
@@ -86,7 +91,7 @@ function getText() {
   return builder.build();
 }
 
-module.exports = () => {
+export default () => {
   let button;
   function method() {
     if (hungerListener === null) {
@@ -98,14 +103,14 @@ module.exports = () => {
   }
   return {
     type: "specialButton",
-    width: config.gui.component.width,
-    height: config.gui.component.height,
+    width: Config.gui.component.width,
+    height: Config.gui.component.height,
     render: function (screen, xOffset, yOffset) {
       button = screen.addButton(
         xOffset,
         yOffset,
-        config.gui.component.width,
-        config.gui.component.height,
+        Config.gui.component.width,
+        Config.gui.component.height,
         1,
         label,
         JavaWrapper.methodToJava(method)

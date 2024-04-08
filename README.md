@@ -12,7 +12,7 @@ Baritone Selection Manager GUI (BTScreen) for the [JsMacro](https://github.com/J
 - `AutoEat` feature
 - prefered settings for perimeter building
 - `BTScreenStatusChange` event
-- You can add your own commands like in [Builder's GUI](https://github.com/Godje/builder-macro-screen), but in a different file: `BTScreen/sections.js`
+- You can add your own commands like in [Builder's GUI](https://github.com/Godje/builder-macro-screen), but in a different file: `BTScreen/Sections.mjs`
 
 ![GUI Screenshot](image.jpg)
 
@@ -23,12 +23,12 @@ Baritone Selection Manager GUI (BTScreen) for the [JsMacro](https://github.com/J
 3. Locate the Macros folder (normaly `.minecraft/config/jsMacros/Macros`) where your JsMacros is looking for the js files to execute (can be done through jsMacros GUI).
 4. Create a new folder named `BTScreen`
 4. Paste everything of this repository inside that folder. Or clone this folder instead. ([zip download](https://github.com/thojo0/jsmacro-btscreen/archive/refs/heads/master.zip))
-5. Add a new Service, named `BTScreen` and linked to the file `BTScreen/Service.js`, inside your JsMacros GUI (go to Controls to see how to open your JsMacro GUI)
+5. Add a new Service, named `BTScreen` and linked to the file `BTScreen/Service.mjs`, inside your JsMacros GUI (go to Controls to see how to open your JsMacro GUI)
    Don't forget to `Enable` and `Start` the service.
 6. Attach the `BTScreen/Open.js` to the key that you would like to open the screen with.
-7. You can change the homes/cmds (and more) in `BTScreen/config.js` (or button `Open config.js`)
+7. You can change the homes/cmds (and more) in `BTScreen/Config.mjs` (or button `Open Config.mjs`)
    Just restart the service to reload the config.
 
 #### For Experts
 8. A demo to see how to get the current status is inside `BTScreen/ReadStatus.js` (to test just execut the file somehow)
-7. A demo for the event is in `BTScreen/Listener.js`, you can enable the demo in the config (`eventLogger`).
+7. A demo for the event is in `BTScreen/Listener.mjs`, you can enable the demo in the config (`eventLogger`).

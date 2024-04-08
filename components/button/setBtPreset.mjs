@@ -1,11 +1,14 @@
-module.exports = (preset) => {
+import * as Baritone from "../../Baritone.mjs";
+import Config from "../../Config.mjs";
+
+export default (preset) => {
   function method() {
-    setBtPreset(preset);
+    Baritone.setPreset(preset);
   }
   return {
     type: "specialButton",
-    width: config.gui.component.width,
-    height: config.gui.component.height,
+    width: Config.gui.component.width,
+    height: Config.gui.component.height,
     render: function (screen, xOffset, yOffset) {
       screen.addButton(
         xOffset,

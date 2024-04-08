@@ -1,5 +1,9 @@
-state.haste = "Refreshing Haste";
+import * as Baritone from "../../Baritone.mjs";
+import { addStatus, addStop, delStop, getStatus, log, tp } from "../../Helper.mjs";
+import Config from "../../Config.mjs";
+
 const label = "AutoHaste";
+addStatus("haste", "Refreshing Haste")
 
 function hasHaste(errorReturn = false) {
   try {
@@ -13,19 +17,19 @@ function startTickListener() {
   tickListener = JsMacros.on(
     "Tick",
     JavaWrapper.methodToJava(() => {
-      switch (event.getString("status")) {
-        case state.mine:
+      switch (getStatus()) {
+        case getStatus("mine"):
           if (hasHaste(true)) {
             break;
           }
-          btPause("haste");
-          teleport("haste");
+          Baritone.pause("haste");
+          tp("haste");
           event.getObject("AutoDropIntegration")("haste");
           while (!hasHaste()) {
             JsMacros.waitForEvent("StatusEffectUpdate");
           }
-          teleport("mine");
-          btResume();
+          tp("mine");
+          Baritone.resume();
           break;
       }
     })
@@ -50,7 +54,7 @@ function getText() {
   return builder.build();
 }
 
-module.exports = () => {
+export default () => {
   let button;
   function method() {
     if (tickListener === null) {
@@ -62,8 +66,8 @@ module.exports = () => {
   }
   return {
     type: "specialButton",
-    width: config.gui.component.width,
-    height: config.gui.component.height,
+    width: Config.gui.component.width,
+    height: Config.gui.component.height,
     render: function (screen, xOffset, yOffset) {
       button = screen.addButton(
         xOffset,
