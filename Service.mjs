@@ -1,15 +1,20 @@
 import Config from "./Config.mjs";
 import * as Baritone from "./Baritone.mjs";
-import { addStop, delStop, init, log, toInt } from "./Helper.mjs";
+import {
+  addStatus,
+  addStop,
+  delStop,
+  getStatus,
+  init,
+  log,
+  setStatus,
+  toInt,
+  tp,
+} from "./Helper.mjs";
 import Sections from "./Sections.mjs";
 import "./Listener.mjs";
 
 init();
-
-event.putObject("Baritone", Baritone);
-event.putObject("log", log);
-event.putObject("addStop", addStop);
-event.putObject("delStop", delStop);
 
 // BEGIN : Screen Service
 const theScreen = Hud.createScreen("Baritone Selection Manager GUI", false);
@@ -121,6 +126,18 @@ addStop("screen", () => {
   event.remove("screen");
   Hud.unregisterDraw2D(theScreen);
 });
-
-event.putObject("screen", theScreen);
 // END : Screen Service
+
+// START : Expose things
+event.putObject("Baritone", Baritone);
+event.putObject("Config", Config);
+event.putObject("Sections", Sections);
+event.putObject("log", log);
+event.putObject("tp", tp);
+event.putObject("addStop", addStop);
+event.putObject("delStop", delStop);
+event.putObject("addStatus", addStatus);
+event.putObject("getStatus", getStatus);
+event.putObject("setStatus", setStatus);
+event.putObject("screen", theScreen);
+// END : Expose things

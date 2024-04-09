@@ -1,6 +1,7 @@
 import * as Baritone from "../../Baritone.mjs";
 import { addStatus, addStop, delStop, getStatus, log, tp } from "../../Helper.mjs";
 import Config from "../../Config.mjs";
+import { autoDropIntegration } from "./autoDrop.mjs";
 
 const label = "AutoSleep";
 addStatus("sleep", "Sleeping")
@@ -34,7 +35,7 @@ function startTickListener() {
                   log("Error: Dimention not the same after teleport");
                   stopTickListener();
                 } else {
-                  event.getObject("AutoDropIntegration")("bed");
+                  autoDropIntegration("bed")
                   const playerEntity = Player.getPlayer();
                   const pos = playerEntity.getBlockPos();
                   playerEntity.interactBlock(

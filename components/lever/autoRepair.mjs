@@ -1,6 +1,7 @@
 import * as Baritone from "../../Baritone.mjs";
 import { addStatus, addStop, delStop, getStatus, log, tp } from "../../Helper.mjs";
 import Config from "../../Config.mjs";
+import { autoDropIntegration } from "./autoDrop.mjs";
 
 const label = "AutoRepair";
 addStatus("repair", "Repairing")
@@ -66,7 +67,7 @@ function startDamageListener() {
                   item = e.item;
                   switchToSword();
                   tp("xp");
-                  event.getObject("AutoDropIntegration")("xp");
+                  autoDropIntegration("xp")
                   running = true;
                   hitLoop: while (running) {
                     switch (getStatus()) {

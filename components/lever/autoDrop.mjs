@@ -85,7 +85,8 @@ function getText() {
   return builder.build();
 }
 
-function dropIntegration(home) {
+event.putObject("autoDropIntegration", autoDropIntegration);
+export function autoDropIntegration(home) {
   if (
     Config.autoDrop.integration &&
     pickupListener !== null &&
@@ -94,7 +95,6 @@ function dropIntegration(home) {
     dropSlots();
   }
 }
-event.putObject("AutoDropIntegration", dropIntegration);
 
 export default () => {
   let button;
