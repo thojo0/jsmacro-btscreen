@@ -146,6 +146,19 @@ export default {
           "dragon_egg",
         ];
       },
+      // will use as bride/pillar/etc. blocks while pathing
+      acceptableThrowawayItems: [
+        "grass_block",
+        "dirt",
+        "cobblestone",
+        "stone",
+        "deepslate",
+        "cobbled_deepslate",
+        "netherrack",
+        "soul_sand",
+        "soul_soil",
+        "basalt",
+      ],
     },
   },
   gui: {
