@@ -24,8 +24,7 @@ export function delStop(id, exec) {
   if (exec) stopObject[id]();
   delete stopObject[id];
 }
-export function restartService(screen = null) {
-  if (screen) screen.close();
+export function restartService() {
   JsMacros.runScript(
     "js",
     `JsMacros.getServiceManager().restartService("${event.serviceName}")`

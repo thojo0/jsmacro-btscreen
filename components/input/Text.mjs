@@ -37,6 +37,7 @@ export default class Text extends Base {
             this.value = v;
           })
         )
+        .setSuggestion(this.suggestion)
         .setText(this.value)
     );
     this.elements.push(

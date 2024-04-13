@@ -7,7 +7,9 @@ const API = Java.type("baritone.api.BaritoneAPI");
 export const primary = API.getProvider().getPrimaryBaritone(); // https://baritone.leijurv.com/baritone/api/IBaritone.html
 export const settings = API.getSettings(); // https://baritone.leijurv.com/baritone/api/Settings.html
 
+export let lastCommand = null;
 export function execute(command) {
+  lastCommand = command;
   // https://baritone.leijurv.com/baritone/api/command/manager/ICommandManager.html#execute-java.lang.String-
   return primary.getCommandManager().execute(command);
 }
