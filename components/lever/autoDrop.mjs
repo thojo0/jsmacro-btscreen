@@ -9,9 +9,14 @@ import {
   tp,
 } from "../../Helper.mjs";
 import Config from "../../Config.mjs";
+import Base from "./Base.mjs";
 
-const label = "AutoDrop";
 addStatus("drop", "Dropping Items");
+
+export default class AutoDrop extends Base {
+  enable = startEffectListener
+  disable = stopEffectListener
+}
 
 let slots;
 function dropSlots() {
@@ -41,7 +46,7 @@ addInit(() => {
     })
   );
 });
-addStop(`${label}Event`, () => {
+addStop(`${AutoDrop.label}Event`, () => {
   JsMacros.off(eventListener);
 });
 
@@ -65,24 +70,15 @@ function startEffectListener() {
       }
     })
   );
-  addStop(label, () => {
+  addStop(AutoDrop.label, () => {
     JsMacros.off(pickupListener);
     pickupListener = null;
   });
-  log(`${label} enabled`);
+  log(`${AutoDrop.label} enabled`);
 }
 function stopEffectListener() {
-  delStop(label, true);
-  log(`${label} disabled`);
-}
-function getText() {
-  const builder = Chat.createTextBuilder().append(label);
-  if (pickupListener === null) {
-    builder.withColor(0xc);
-  } else {
-    builder.withColor(0x2);
-  }
-  return builder.build();
+  delStop(AutoDrop.label, true);
+  log(`${AutoDrop.label} disabled`);
 }
 
 event.putObject("autoDropIntegration", autoDropIntegration);
@@ -95,32 +91,3 @@ export function autoDropIntegration(home) {
     dropSlots();
   }
 }
-
-export default () => {
-  let button;
-  function method() {
-    if (pickupListener === null) {
-      startEffectListener();
-    } else {
-      stopEffectListener();
-    }
-    button.setLabel(getText());
-  }
-  return {
-    type: "specialButton",
-    width: Config.gui.component.width,
-    height: Config.gui.component.height,
-    render: function (screen, xOffset, yOffset) {
-      button = screen.addButton(
-        xOffset,
-        yOffset,
-        this.width,
-        this.height,
-        1,
-        label,
-        JavaWrapper.methodToJava(method)
-      );
-      button.setLabel(getText());
-    },
-  };
-};

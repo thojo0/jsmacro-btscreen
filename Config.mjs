@@ -41,9 +41,7 @@ export default {
     check: 5, // between loop-checks (in ticks)
     get hit() {
       // between monster-hits (in milliseconds)
-      const sleep = 1500;
-      const rsleep = random(1500);
-      return sleep + rsleep;
+      return 1500 + random(1500);
     },
   },
   eventLogger: false,
@@ -57,6 +55,21 @@ export default {
     walk: {
       allowBreak: false,
       allowPlace: false,
+    },
+    farm: {
+      allowBreak: false,
+      allowPlace: false,
+      buildInLayers: false,
+      _blocksToDisallowBreaking: [
+        "+budding_amethyst",
+        "-small_amethyst_bud",
+        "-medium_amethyst_bud",
+        "-large_amethyst_bud",
+        "-amethyst_cluster",
+      ],
+      get _buildIgnoreBlocks() {
+        return this._blocksToDisallowBreaking;
+      },
     },
     default: {
       allowBreak: true,
@@ -123,8 +136,7 @@ export default {
       ],
       // will mine only if in way of path (disallow+ignore)
       get buildIgnoreBlocks() {
-        delete this.buildIgnoreBlocks;
-        return (this.buildIgnoreBlocks = [
+        return [
           ...this.blocksToDisallowBreaking,
           // problematic for baritone
           "small_amethyst_bud",
@@ -132,7 +144,7 @@ export default {
           "large_amethyst_bud",
           "amethyst_cluster",
           "dragon_egg",
-        ]);
+        ];
       },
     },
   },

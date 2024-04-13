@@ -1,21 +1,10 @@
-import Config from "../../Config.mjs";
 import { restartService } from "../../Helper.mjs";
+import Base from "./Base.mjs";
 
-export default () => {
-  return {
-    type: "specialButton",
-    width: Config.gui.component.width,
-    height: Config.gui.component.height,
-    render: function (screen, xOffset, yOffset) {
-      screen.addButton(
-        xOffset,
-        yOffset,
-        this.width,
-        this.height,
-        1,
-        "Restart Service",
-        JavaWrapper.methodToJava(() => restartService(screen))
-      );
-    },
-  };
-};
+export default class RestartService extends Base {
+  label = "Restart Service";
+  run(_, screen) {
+    screen.close();
+    restartService();
+  }
+}

@@ -16,17 +16,18 @@ export default [
         return arr;
       })(),
       [
-        button.stop(),
-        lever.autoSleep(),
-        lever.autoRepair(),
-        lever.autoEat(),
-        lever.autoHaste(),
-        lever.autoDrop(),
+        new button.stop(),
+        new lever.autoSleep(),
+        new lever.autoRepair(),
+        new lever.autoEat(),
+        new lever.autoHaste(),
+        new lever.autoDrop(),
       ],
       [
-        button.setBtPreset("default"),
-        button.restartService(),
-        button.openFile(__dirname + "/Config.mjs"),
+        new button.restartService(),
+        new button.openFile(__dirname + "/Config.mjs"),
+        new button.setPreset("default"),
+        new button.setPreset("farm"),
       ],
     ],
   },
@@ -40,16 +41,16 @@ export default [
   {
     title: "Selection Move",
     groups: [
-      [input.dimensional("shift")],
-      [input.dimensional("expand", "expan")],
-      [input.dimensional("contract", "contr")],
+      [new input.dimensional("shift")],
+      [new input.dimensional("expand", "expan")],
+      [new input.dimensional("contract", "contr")],
     ],
   },
   {
     title: "Modification",
     groups: [
       [
-        input.text(
+        new input.text(
           [
             ["sel set", "sel walls", "sel shell"],
             ["", "sel replace"],

@@ -1,101 +1,96 @@
 import * as Baritone from "../../Baritone.mjs";
-import { toInt } from "../../Helper.mjs";
 import Config from "../../Config.mjs";
+import { toInt } from "../../Helper.mjs";
+import Base from "./Base.mjs";
 
-const dirComponentWidth = toInt(Config.gui.component.width / 3);
+const elementHeight = Config.gui.component.height;
 
-export default (command, text = command) => {
-  let amount = "1";
-
-  function inputMethod(value) {
-    amount = value;
+export default class Dimensional extends Base {
+  elementWidth = toInt(this.width / 3);
+  amount = "1";
+  constructor(command, text = command) {
+    super();
+    this.command = command;
+    this.text = text;
+    this.height = elementHeight * 3;
   }
-  function commandMethod(direction) {
-    return () => {
-      const finalCommand = ["sel", command, "a", direction, amount].join(" ");
-      Baritone.execute(finalCommand);
-    };
+  getCommandMethod(direction) {
+    return JavaWrapper.methodToJava(() => {
+      Baritone.execute(`sel ${this.command} a ${direction} ${this.amount}`);
+    });
   }
-
-  return {
-    type: "dimensionalInput",
-    width: dirComponentWidth * 3,
-    height: Config.gui.component.height * 3,
-    render: function (screen, xOffset, yOffset) {
+  init(screen, x, y) {
+    this.elements.push(
       //left
-      screen.addText(
-        text,
-        xOffset + 3,
-        yOffset + Config.gui.component.height / 2 - 5,
-        0xffffff,
-        true
-      );
+      screen.addText(this.text, x + 3, y + elementHeight / 2 - 5, 0xffffff, true),
       screen.addButton(
-        xOffset,
-        yOffset + Config.gui.component.height,
-        dirComponentWidth,
-        Config.gui.component.height,
+        x,
+        y + elementHeight,
+        this.elementWidth,
+        elementHeight,
         1,
         "west",
-        JavaWrapper.methodToJava(commandMethod("west"))
-      );
+        this.getCommandMethod("west")
+      ),
       // mid
       screen.addButton(
-        xOffset + dirComponentWidth,
-        yOffset,
-        dirComponentWidth,
-        Config.gui.component.height,
+        x + this.elementWidth,
+        y,
+        this.elementWidth,
+        elementHeight,
         1,
         "north",
-        JavaWrapper.methodToJava(commandMethod("north"))
-      );
+        this.getCommandMethod("north")
+      ),
       screen
         .addTextInput(
-          xOffset + dirComponentWidth - 1,
-          yOffset + Config.gui.component.height - 1,
-          dirComponentWidth + 2,
-          Config.gui.component.height + 2,
+          x + this.elementWidth - 1,
+          y + elementHeight - 1,
+          this.elementWidth + 2,
+          elementHeight + 2,
           "1",
-          JavaWrapper.methodToJava(inputMethod)
+          JavaWrapper.methodToJava((v) => {
+            this.amount = v;
+          })
         )
-        .setText("1");
+        .setText(this.amount),
       screen.addButton(
-        xOffset + dirComponentWidth,
-        yOffset + Config.gui.component.height * 2,
-        dirComponentWidth,
-        Config.gui.component.height,
+        x + this.elementWidth,
+        y + elementHeight * 2,
+        this.elementWidth,
+        elementHeight,
         1,
         "south",
-        JavaWrapper.methodToJava(commandMethod("south"))
-      );
+        this.getCommandMethod("south")
+      ),
       // right
       screen.addButton(
-        xOffset + dirComponentWidth * 2,
-        yOffset,
-        dirComponentWidth,
-        Config.gui.component.height,
+        x + this.elementWidth * 2,
+        y,
+        this.elementWidth,
+        elementHeight,
         1,
         "up",
-        JavaWrapper.methodToJava(commandMethod("up"))
-      );
+        this.getCommandMethod("up")
+      ),
       screen.addButton(
-        xOffset + dirComponentWidth * 2,
-        yOffset + Config.gui.component.height,
-        dirComponentWidth,
-        Config.gui.component.height,
+        x + this.elementWidth * 2,
+        y + elementHeight,
+        this.elementWidth,
+        elementHeight,
         1,
         "east",
-        JavaWrapper.methodToJava(commandMethod("east"))
-      );
+        this.getCommandMethod("east")
+      ),
       screen.addButton(
-        xOffset + dirComponentWidth * 2,
-        yOffset + Config.gui.component.height * 2,
-        dirComponentWidth,
-        Config.gui.component.height,
+        x + this.elementWidth * 2,
+        y + elementHeight * 2,
+        this.elementWidth,
+        elementHeight,
         1,
         "down",
-        JavaWrapper.methodToJava(commandMethod("down"))
-      );
-    },
-  };
-};
+        this.getCommandMethod("down")
+      )
+    );
+  }
+}

@@ -1,14 +1,19 @@
 // Assumes food is held in the offhand
 // Right clicks and holds if food level is below threshhold
 // Likely to produce undesirable results if you end up right clicking something. Be warned.
+// Inspired by: https://discord.com/channels/732004268948586545/1097289256839434393/1097677403213533185
 
 import * as Baritone from "../../Baritone.mjs";
 import { addStatus, addStop, delStop, getStatus, log } from "../../Helper.mjs";
 import Config from "../../Config.mjs";
+import Base from "./Base.mjs";
 
-// Inspired by: https://discord.com/channels/732004268948586545/1097289256839434393/1097677403213533185
-const label = "AutoEat";
 addStatus("eat", "Eating")
+
+export default class AutoEat extends Base {
+  enable = startHungerListener
+  disable = stopHungerListener
+}
 
 function getOffhand(inv = Player.openInventory()) {
   const invMap = inv.getMap();
@@ -71,51 +76,13 @@ function startHungerListener() {
       }
     })
   );
-  addStop(label, () => {
+  addStop(AutoEat.label, () => {
     JsMacros.off(hungerListener);
     hungerListener = null;
   });
-  log(label + " enabled");
+  log(AutoEat.label + " enabled");
 }
 function stopHungerListener() {
-  delStop(label, true);
-  log(label + " disabled");
+  delStop(AutoEat.label, true);
+  log(AutoEat.label + " disabled");
 }
-function getText() {
-  const builder = Chat.createTextBuilder().append(label);
-  if (hungerListener === null) {
-    builder.withColor(0xc);
-  } else {
-    builder.withColor(0x2);
-  }
-  return builder.build();
-}
-
-export default () => {
-  let button;
-  function method() {
-    if (hungerListener === null) {
-      startHungerListener();
-    } else {
-      stopHungerListener();
-    }
-    button.setLabel(getText());
-  }
-  return {
-    type: "specialButton",
-    width: Config.gui.component.width,
-    height: Config.gui.component.height,
-    render: function (screen, xOffset, yOffset) {
-      button = screen.addButton(
-        xOffset,
-        yOffset,
-        Config.gui.component.width,
-        Config.gui.component.height,
-        1,
-        label,
-        JavaWrapper.methodToJava(method)
-      );
-      button.setLabel(getText());
-    },
-  };
-};

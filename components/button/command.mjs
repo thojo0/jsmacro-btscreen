@@ -1,37 +1,21 @@
 import * as Baritone from "../../Baritone.mjs";
-import Config from "../../Config.mjs";
+import Base from "./Base.mjs";
 
-export default (command, label = command) => {
-  function method() {
-    switch (command[0]) {
+export default class Command extends Base {
+  async = true;
+  constructor(command, label = command) {
+    super();
+    this.command = command;
+    this.label = label;
+  }
+  run() {
+    switch (this.command[0]) {
       case "/": // / -> normal chat
-        Chat.say(command);
+        Chat.say(this.command);
         break;
       default: // default baritone
-        Baritone.execute(command);
+        Baritone.execute(this.command);
         break;
     }
   }
-  const button = {
-    width: Config.gui.component.width,
-    height: Config.gui.component.height,
-  };
-  if (command) {
-    button.type = "commandButton";
-    button.render = function (screen, xOffset, yOffset) {
-      screen.addButton(
-        xOffset,
-        yOffset,
-        button.width,
-        button.height,
-        1,
-        label,
-        JavaWrapper.methodToJavaAsync(method)
-      );
-    };
-  } else {
-    button.type = "empty";
-    button.render = function (_screen, _xOffset, _yOffset) {};
-  }
-  return button;
-};
+}

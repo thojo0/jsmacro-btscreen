@@ -12,34 +12,35 @@ import {
   tp,
 } from "./Helper.mjs";
 import Sections from "./Sections.mjs";
+import { button, empty } from "./components/index.mjs";
 import "./Listener.mjs";
 
 init();
 
 // BEGIN : Screen Service
-const theScreen = Hud.createScreen("Baritone Selection Manager GUI", false);
-const draw2D = Hud.createDraw2D();
-
 /**
  * Gets the simple section group data and turns it into final components
  */
-import commandButton from "./components/button/command.mjs";
 function setSectionComponents(section) {
   section.groups = section.groups.map((group) => {
     return group.map((component) => {
-      switch (component.constructor.name) {
-        case "String":
-          return commandButton(component);
+      if (component) {
+        switch (component.constructor.name) {
+          case "String":
+            return new button.command(component);
 
-        case "Array":
-          return commandButton(component[0], component[1]);
+          case "Array":
+            return new button.command(...component);
 
-        default:
-          return component;
+          default:
+            return component;
+        }
       }
+      return new empty();
     });
   });
 }
+Sections.forEach(setSectionComponents);
 
 /**
  * Setting the dimensions for each section based on the width and height of the components
@@ -80,16 +81,15 @@ function renderTitle(screen, title, xOffset, yOffset) {
   textElement.setPos(toInt(xOffset - textElement.getWidth() / 2), yOffset + 5);
 }
 
-function screenInit() {
-  Sections.forEach(setSectionComponents);
+function screenInit(screen) {
   Sections.forEach(setSectionDimensions);
   const totalHeight = Sections.reduce((prev, curr) => prev + curr.height, 0);
   const totalWidth = Sections.reduce(
     (prev, curr) => Math.max(prev, curr.width),
     0
   );
-  const screenWidth = draw2D.getWidth();
-  const screenHeight = draw2D.getHeight();
+  const screenWidth = screen.getWidth();
+  const screenHeight = screen.getHeight();
   const xOffset = toInt(screenWidth / 2);
   const yOffset = toInt(screenHeight / 2) - totalHeight / 2;
   let baseOffset = { x: xOffset, y: yOffset };
@@ -101,7 +101,7 @@ function screenInit() {
     };
     // render the title
     renderTitle(
-      theScreen,
+      screen,
       section.title,
       toInt(screenWidth / 2),
       toInt(sectionOffset.y + Config.gui.titleHeight - 20)
@@ -112,7 +112,7 @@ function screenInit() {
     section.groups.forEach((group) => {
       let groupOffset = { x: sectionOffset.x, y: sectionOffset.y };
       group.forEach((component) => {
-        component.render(theScreen, toInt(groupOffset.x), toInt(groupOffset.y));
+        component.init(screen, toInt(groupOffset.x), toInt(groupOffset.y));
         groupOffset.y += component.height;
       });
       sectionOffset.x += getGroupWidth(group) + Config.gui.groupSpacing;
@@ -120,7 +120,20 @@ function screenInit() {
     baseOffset.y += section.height;
   });
 }
+function screenClose(screen) {
+  // run close functions
+  Sections.forEach((section) => {
+    section.groups.forEach((group) => {
+      group.forEach((component) => {
+        component.close(screen);
+      });
+    });
+  });
+}
+
+const theScreen = Hud.createScreen("Baritone Selection Manager GUI", false);
 theScreen.setOnInit(JavaWrapper.methodToJava(screenInit));
+theScreen.setOnClose(JavaWrapper.methodToJava(screenClose));
 
 addStop("screen", () => {
   event.remove("screen");

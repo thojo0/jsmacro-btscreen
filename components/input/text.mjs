@@ -1,71 +1,77 @@
 import * as Baritone from "../../Baritone.mjs";
 import Config from "../../Config.mjs";
+import Base from "./Base.mjs";
 
-export default (commands, defaultText = "") => {
-  let blocks = defaultText;
-  const componentCount = Math.max(...commands.map((e) => e.length));
+const elementWidth = Config.gui.component.width;
+const elementHeight = Config.gui.component.height;
+const groupSpacing = Config.gui.groupSpacing;
 
-  function inputMethod(value) {
-    blocks = value;
+export default class Text extends Base {
+  constructor(commands, suggestion = "", defaultValue = "") {
+    super();
+    this.commands = commands;
+    this.suggestion = suggestion;
+    this.value = this.defaultValue = defaultValue;
+    const elementCount = Math.max(...commands.map((e) => e.length));
+    this.width =
+      elementWidth * elementCount + groupSpacing * (elementCount - 1);
+    this.height = elementHeight * (commands.length + 1);
   }
-  function commandMethod(command) {
-    return () => {
-      const finalCommand = `${command} ${blocks}`;
+  getCommandMethod(command) {
+    return JavaWrapper.methodToJava(() => {
+      const finalCommand = `${command} ${this.value}`;
       Baritone.execute(finalCommand);
-    };
+    });
   }
-  function resetInputMethod(input) {
-    return () => {
-      input.setText(defaultText);
-    };
-  }
-
-  return {
-    type: "textInput",
-    width:
-      Config.gui.component.width * componentCount +
-      Config.gui.groupSpacing * (componentCount - 1),
-    height: Config.gui.component.height * (commands.length + 1),
-    render: function (screen, xOffset, yOffset) {
-      // Input
-      const textInput = screen
+  init(screen, x, y) {
+    // Input
+    this.elements.push(
+      screen
         .addTextInput(
-          xOffset,
-          yOffset,
-          this.width - Config.gui.component.height - 3,
-          Config.gui.component.height,
+          x,
+          y,
+          this.width - elementHeight - 3,
+          elementHeight,
           "1",
-          JavaWrapper.methodToJava(inputMethod)
+          JavaWrapper.methodToJava((v) => {
+            this.value = v;
+          })
         )
-        .setText(blocks);
+        .setText(this.value)
+    );
+    this.elements.push(
       screen.addButton(
-        xOffset + this.width - Config.gui.component.height - 1,
-        yOffset,
-        Config.gui.component.height,
-        Config.gui.component.height,
+        x + this.width - elementHeight - 1,
+        y,
+        elementHeight,
+        elementHeight,
         1,
         "R",
-        JavaWrapper.methodToJava(resetInputMethod(textInput))
-      );
-
-      // Buttons
-      commands.forEach((cmds) => {
-        yOffset += Config.gui.component.height;
-        for (let i = 0; i < cmds.length; i++) {
-          const cmd = cmds[i];
-          if (cmd) {
+        JavaWrapper.methodToJava(() => {
+          this.value = this.defaultValue;
+          this.elements[0].setText(this.value);
+        })
+      )
+    );
+    // Buttons
+    this.commands.forEach((cmds) => {
+      y += elementHeight;
+      for (let i = 0; i < cmds.length; i++) {
+        const cmd = cmds[i];
+        if (cmd) {
+          this.elements.push(
             screen.addButton(
-              xOffset + Config.gui.component.width * i + Config.gui.groupSpacing * i,
-              yOffset,
-              Config.gui.component.width,
-              Config.gui.component.height,
+              x + elementWidth * i + groupSpacing * i,
+              y,
+              elementWidth,
+              elementHeight,
               1,
               cmd,
-              JavaWrapper.methodToJava(commandMethod(cmd))
-            );
-          }
+              this.getCommandMethod(cmd)
+            )
+          );
         }
-      });
-    },
-  };
-};
+      }
+    });
+  }
+}

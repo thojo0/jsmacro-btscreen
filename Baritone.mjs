@@ -13,20 +13,55 @@ export function execute(command) {
 }
 export function isActive() {
   // https://baritone.leijurv.com/baritone/api/pathing/calc/IPathingControlManager.html
-  return primary
-    .getPathingControlManager()
-    .mostRecentInControl()
-    .isPresent();
+  return primary.getPathingControlManager().mostRecentInControl().isPresent();
 }
 
 // https://baritone.leijurv.com/baritone/api/utils/SettingsUtil.html
 const SettingsUtil = Java.type("baritone.api.utils.SettingsUtil");
 export function setPreset(preset) {
   for (let [key, value] of Object.entries(Config.baritone[preset])) {
-    if (value.constructor.name === "Array") {
-      value = value.join();
+    key = key.toLowerCase();
+    const modify = key.startsWith("_");
+    if (modify) {
+      key = key.substring(1);
     }
-    SettingsUtil.parseAndApply(settings, key.toLowerCase(), value.toString());
+    const setting = settings.byLowerName.get(key);
+
+    if (
+      modify &&
+      SettingsUtil.settingTypeToString(setting) === "List<class_2248>"
+    ) {
+      if (value.constructor.name !== "Array") {
+        value = value.toString().split(",");
+      }
+      const pervious = new Set(
+        SettingsUtil.settingValueToString(setting).split(",")
+      );
+      value.forEach((b) => {
+        const prefix = b[0];
+        b = b.substring(1);
+        switch (prefix) {
+          case "+":
+            pervious.add(b);
+            break;
+          case "-":
+            pervious.delete(b);
+            break;
+        }
+      });
+      value = [...pervious];
+    }
+
+    switch (value.constructor.name) {
+      case "Array":
+        value = value.join();
+        break;
+      default:
+        value = value.toString();
+        break;
+    }
+
+    SettingsUtil.parseAndApply(settings, key, value);
   }
 }
 
