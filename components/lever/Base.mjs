@@ -7,15 +7,15 @@ export default class Base extends ButtonBase {
   static enabled = false;
   get label() {
     const builder = Chat.createTextBuilder().append(this.constructor.label);
-    if (Base.enabled) builder.withColor(0x2);
+    if (this.constructor.enabled) builder.withColor(0x2);
     else builder.withColor(0xc);
 
     return builder.build();
   }
   run() {
-    if (Base.enabled) this.disable();
+    if (this.constructor.enabled) this.disable();
     else this.enable();
-    Base.enabled = !Base.enabled;
+    this.constructor.enabled = !this.constructor.enabled;
     this.elements[0].setLabel(this.label);
   }
   enable() {}
