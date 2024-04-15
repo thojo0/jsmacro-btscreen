@@ -1,3 +1,4 @@
+import Config from "./Config.mjs";
 import { tpCommand } from "./Helper.mjs";
 import { button, input, lever } from "./components/index.mjs";
 
@@ -5,6 +6,7 @@ export default [
   {
     title: "Special",
     groups: [
+      Config.leftExtraButtons ?? [""],
       (() => {
         const arr = [];
         ["mine", "xp", "bed", "haste", "drop"].forEach((name) => {
@@ -29,6 +31,7 @@ export default [
         new button.setPreset("default"),
         new button.setPreset("farm"),
       ],
+      Config.rightExtraButtons ?? [""],
     ],
   },
   {
