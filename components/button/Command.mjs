@@ -10,8 +10,10 @@ export default class Command extends Base {
   }
   run() {
     switch (this.command[0]) {
-      case "/": // / -> normal chat
-        Chat.say(this.command);
+      // normal chat
+      case "/":
+      case " ":
+        Chat.say(this.command.trim());
         break;
       default: // default baritone
         Baritone.execute(this.command);
