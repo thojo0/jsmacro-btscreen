@@ -1,8 +1,8 @@
 import * as Baritone from "../../Baritone.mjs";
 import { log } from "../../Helper.mjs";
-import Base from "./Base.mjs";
+import ButtonComponent from "../ButtonComponent.mjs";
 
-export default class SetPreset extends Base {
+export default class SetPreset extends ButtonComponent {
   async = true;
   constructor(preset) {
     super();

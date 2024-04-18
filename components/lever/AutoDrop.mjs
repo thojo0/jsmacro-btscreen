@@ -9,11 +9,11 @@ import {
   tp,
 } from "../../Helper.mjs";
 import Config from "../../Config.mjs";
-import Base from "./Base.mjs";
+import LeverComponent from "../LeverComponent.mjs";
 
 addStatus("drop", "Dropping Items");
 
-export default class AutoDrop extends Base {
+export default class AutoDrop extends LeverComponent {
   enable = startEffectListener
   disable = stopEffectListener
 }

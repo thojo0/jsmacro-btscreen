@@ -1,27 +1,30 @@
-import * as Baritone from "../../Baritone.mjs";
 import Config from "../../Config.mjs";
-import Base from "./Base.mjs";
+import InputComponent from "../InputComponent.mjs";
 
-const elementWidth = Config.gui.component.width;
-const elementHeight = Config.gui.component.height;
-const groupSpacing = Config.gui.groupSpacing;
-
-export default class Text extends Base {
-  constructor(commands, suggestion = "", defaultValue = "") {
+export default class Text extends InputComponent {
+  static #instances = new Map();
+  static get(name) {
+    return Text.#instances.get(name).value;
+  }
+  static set(name, value) {
+    Text.#instances.get(name).setValue(value);
+  }
+  constructor(name, suggestion = "", defaultValue = "", length = 1) {
     super();
-    this.commands = commands;
+    Text.#instances.set(name, this);
     this.suggestion = suggestion;
     this.value = this.defaultValue = defaultValue;
-    const elementCount = Math.max(...commands.map((e) => e.length));
-    this.width =
-      elementWidth * elementCount + groupSpacing * (elementCount - 1);
-    this.height = elementHeight * (commands.length + 1);
+    this.width *= length;
+    this.width += Config.gui.groupSpacing * (length - 1);
   }
-  getCommandMethod(command) {
-    return JavaWrapper.methodToJava(() => {
-      const finalCommand = `${command} ${this.value}`;
-      Baritone.execute(finalCommand);
-    });
+  setValue(value, screen) {
+    if (value !== undefined) this.value = value;
+    const ti = this.elements[0];
+    if (!ti) return;
+    if (this.value.length) ti.setSuggestion("");
+    else ti.setSuggestion(this.suggestion);
+    if (screen) return;
+    ti.setText(this.value);
   }
   init(screen, x, y) {
     // Input
@@ -30,49 +33,24 @@ export default class Text extends Base {
         .addTextInput(
           x,
           y,
-          this.width - elementHeight - 3,
-          elementHeight,
-          "1",
-          JavaWrapper.methodToJava((v) => {
-            this.value = v;
-          })
+          this.width - this.height - 3,
+          this.height,
+          "",
+          JavaWrapper.methodToJava(this.setValue.bind(this))
         )
-        .setSuggestion(this.suggestion)
-        .setText(this.value)
+        .setMaxLength(4096)
     );
+    this.setValue();
     this.elements.push(
       screen.addButton(
-        x + this.width - elementHeight - 1,
+        x + this.width - this.height - 1,
         y,
-        elementHeight,
-        elementHeight,
+        this.height,
+        this.height,
         1,
         "R",
-        JavaWrapper.methodToJava(() => {
-          this.value = this.defaultValue;
-          this.elements[0].setText(this.value);
-        })
+        JavaWrapper.methodToJava(() => this.setValue(this.defaultValue))
       )
     );
-    // Buttons
-    this.commands.forEach((cmds) => {
-      y += elementHeight;
-      for (let i = 0; i < cmds.length; i++) {
-        const cmd = cmds[i];
-        if (cmd) {
-          this.elements.push(
-            screen.addButton(
-              x + elementWidth * i + groupSpacing * i,
-              y,
-              elementWidth,
-              elementHeight,
-              1,
-              cmd,
-              this.getCommandMethod(cmd)
-            )
-          );
-        }
-      }
-    });
   }
 }

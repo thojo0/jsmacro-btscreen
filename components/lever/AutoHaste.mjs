@@ -1,11 +1,11 @@
 import * as Baritone from "../../Baritone.mjs";
 import { addStatus, addStop, delStop, getStatus, log, tp } from "../../Helper.mjs";
 import { autoDropIntegration } from "./AutoDrop.mjs";
-import Base from "./Base.mjs";
+import LeverComponent from "../LeverComponent.mjs";
 
 addStatus("haste", "Refreshing Haste")
 
-export default class AutoHaste extends Base {
+export default class AutoHaste extends LeverComponent {
   enable = startTickListener
   disable = stopTickListener
 }

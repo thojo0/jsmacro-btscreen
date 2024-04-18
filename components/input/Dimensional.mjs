@@ -1,11 +1,11 @@
 import * as Baritone from "../../Baritone.mjs";
 import Config from "../../Config.mjs";
 import { toInt } from "../../Helper.mjs";
-import Base from "./Base.mjs";
+import InputComponent from "../InputComponent.mjs";
 
 const elementHeight = Config.gui.component.height;
 
-export default class Dimensional extends Base {
+export default class Dimensional extends InputComponent {
   elementWidth = toInt(this.width / 3);
   amount = "1";
   constructor(command, text = command) {

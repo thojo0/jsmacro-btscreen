@@ -162,7 +162,6 @@ export default {
     },
   },
   gui: {
-    titleHeight: 30,
     groupSpacing: 5,
     component: {
       width: 105,

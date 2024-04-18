@@ -1,7 +1,7 @@
 import { restartService } from "../../Helper.mjs";
-import Base from "./Base.mjs";
+import ButtonComponent from "../ButtonComponent.mjs";
 
-export default class RestartService extends Base {
+export default class RestartService extends ButtonComponent {
   label = "Restart Service";
   run(_, screen) {
     screen.close();

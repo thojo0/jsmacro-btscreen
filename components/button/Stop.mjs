@@ -1,6 +1,6 @@
 import * as Baritone from "../../Baritone.mjs";
 import { random } from "../../Helper.mjs";
-import Base from "./Base.mjs";
+import ButtonComponent from "../ButtonComponent.mjs";
 
 function getText() {
   const builder = Chat.createTextBuilder();
@@ -21,7 +21,7 @@ function getText() {
   return builder.build();
 }
 
-export default class Stop extends Base {
+export default class Stop extends ButtonComponent {
   get label() {
     return getText();
   }

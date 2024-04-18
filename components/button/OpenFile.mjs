@@ -1,11 +1,11 @@
-import Base from "./Base.mjs";
+import ButtonComponent from "../ButtonComponent.mjs";
 
 const EditorScreen = Java.type(
   "xyz.wagyourtail.jsmacros.client.gui.screens.EditorScreen"
 );
 const JsM = Java.type("xyz.wagyourtail.jsmacros.client.JsMacros");
 
-export default class OpenFile extends Base {
+export default class OpenFile extends ButtonComponent {
   constructor(file, label = `Open ${FS.getName(file)}`) {
     super();
     this.file = file;

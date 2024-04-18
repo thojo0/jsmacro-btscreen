@@ -2,11 +2,11 @@ import * as Baritone from "../../Baritone.mjs";
 import { addStatus, addStop, delStop, getStatus, log, tp } from "../../Helper.mjs";
 import Config from "../../Config.mjs";
 import { autoDropIntegration } from "./AutoDrop.mjs";
-import Base from "./Base.mjs";
+import LeverComponent from "../LeverComponent.mjs";
 
 addStatus("sleep", "Sleeping")
 
-export default class AutoSleep extends Base {
+export default class AutoSleep extends LeverComponent {
   enable = startTickListener
   disable = stopTickListener
 }

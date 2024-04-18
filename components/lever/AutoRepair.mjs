@@ -2,11 +2,11 @@ import * as Baritone from "../../Baritone.mjs";
 import { addStatus, addStop, delStop, getStatus, log, tp } from "../../Helper.mjs";
 import Config from "../../Config.mjs";
 import { autoDropIntegration } from "./AutoDrop.mjs";
-import Base from "./Base.mjs";
+import LeverComponent from "../LeverComponent.mjs";
 
 addStatus("repair", "Repairing")
 
-export default class AutoRepair extends Base {
+export default class AutoRepair extends LeverComponent {
   enable = startDamageListener
   disable = stopDamageListener
 }

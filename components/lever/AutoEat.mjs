@@ -6,11 +6,11 @@
 import * as Baritone from "../../Baritone.mjs";
 import { addStatus, addStop, delStop, getStatus, log } from "../../Helper.mjs";
 import Config from "../../Config.mjs";
-import Base from "./Base.mjs";
+import LeverComponent from "../LeverComponent.mjs";
 
 addStatus("eat", "Eating")
 
-export default class AutoEat extends Base {
+export default class AutoEat extends LeverComponent {
   enable = startHungerListener
   disable = stopHungerListener
 }

@@ -1,6 +1,6 @@
-import ButtonBase from "../button/Base.mjs";
+import ButtonComponent from "./ButtonComponent.mjs";
 
-export default class Base extends ButtonBase {
+export default class LeverComponent extends ButtonComponent {
   static get label() {
     return this.name;
   }

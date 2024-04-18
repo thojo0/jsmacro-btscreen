@@ -1,7 +1,5 @@
-import Empty from "./Empty.mjs";
-export const empty = Empty;
-
 import CommandButton from "./button/Command.mjs";
+import FunctionButton from "./button/Function.mjs";
 import OpenFileButton from "./button/OpenFile.mjs";
 import RestartServiceButton from "./button/RestartService.mjs";
 import StopButton from "./button/Stop.mjs";
@@ -9,6 +7,7 @@ import SetPresetButton from "./button/SetPreset.mjs";
 
 export const button = {
   command: CommandButton,
+  function: FunctionButton,
   openFile: OpenFileButton,
   restartService: RestartServiceButton,
   stop: StopButton,
@@ -35,4 +34,12 @@ export const lever = {
   autoHaste: AutoHasteLever,
   autoRepair: AutoRepairLever,
   autoSleep: AutoSleepLever,
+};
+
+import EmptyVisual from "./visual/Empty.mjs";
+import TextVisual from "./visual/Text.mjs";
+
+export const visual = {
+  empty: EmptyVisual,
+  text: TextVisual,
 };

@@ -1,7 +1,7 @@
 # jsmacro-btscreen
 Baritone Selection Manager GUI (BTScreen) for the [JsMacro](https://github.com/JsMacros/JsMacros) mod in Minecraft. It started with [Baritone](https://github.com/cabaletta/baritone) sel command shortcuts, for easy use. Now it has a lot more features.
 
->This project is a (heavy) modified version of the [Builder's GUI](https://github.com/Godje/builder-macro-screen) by [Godje](https://github.com/Godje)
+>This project was inspired by the [Builder's GUI](https://github.com/Godje/builder-macro-screen) by [Godje](https://github.com/Godje)
 
 #### Features
 
@@ -12,7 +12,7 @@ Baritone Selection Manager GUI (BTScreen) for the [JsMacro](https://github.com/J
 - `AutoEat` feature
 - prefered settings for perimeter building
 - `BTScreenStatusChange` event
-- You can add your own commands like in [Builder's GUI](https://github.com/Godje/builder-macro-screen), but in a different file: `BTScreen/Sections.mjs`
+- Add your own commands (file: `BTScreen/Sections.mjs`)
 
 ![GUI Screenshot](image.jpg)
 

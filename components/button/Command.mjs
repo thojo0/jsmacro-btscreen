@@ -1,7 +1,7 @@
 import * as Baritone from "../../Baritone.mjs";
-import Base from "./Base.mjs";
+import ButtonComponent from "../ButtonComponent.mjs";
 
-export default class Command extends Base {
+export default class Command extends ButtonComponent {
   async = true;
   constructor(command, label = command) {
     super();
@@ -9,14 +9,17 @@ export default class Command extends Base {
     this.label = label;
   }
   run() {
-    switch (this.command[0]) {
+    let cmd = this.command;
+    if (typeof cmd === "function") cmd = cmd();
+    if (typeof cmd !== "string" || cmd.length <= 0) return;
+    switch (cmd[0]) {
       // normal chat
       case "/":
       case " ":
-        Chat.say(this.command.trim());
+        Chat.say(cmd.trim());
         break;
       default: // default baritone
-        Baritone.execute(this.command);
+        Baritone.execute(cmd);
         break;
     }
   }

@@ -1,6 +1,6 @@
-import Empty from "../Empty.mjs";
+import Component from "./Component.mjs";
 
-export default class Base extends Empty {
+export default class ButtonComponent extends Component {
   async = false;
   init(screen, x, y) {
     if (this.label instanceof String) {

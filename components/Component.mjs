@@ -1,6 +1,6 @@
 import Config from "../Config.mjs";
 
-export default class Empty {
+export default class Component {
   width = Config.gui.component.width;
   height = Config.gui.component.height;
   elements = [];
