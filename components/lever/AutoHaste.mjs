@@ -6,8 +6,14 @@ import LeverComponent from "../LeverComponent.mjs";
 addStatus("haste", "Refreshing Haste")
 
 export default class AutoHaste extends LeverComponent {
-  enable = startTickListener
-  disable = stopTickListener
+  static enable() {
+    super.enable();
+    startTickListener();
+  }
+  static disable() {
+    super.disable();
+    stopTickListener();
+  }
 }
 
 function hasHaste(errorReturn = false) {

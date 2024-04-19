@@ -1,14 +1,27 @@
 import * as Baritone from "../../Baritone.mjs";
-import { addStatus, addStop, delStop, getStatus, log, tp } from "../../Helper.mjs";
+import {
+  addStatus,
+  addStop,
+  delStop,
+  getStatus,
+  log,
+  tp,
+} from "../../Helper.mjs";
 import Config from "../../Config.mjs";
 import { autoDropIntegration } from "./AutoDrop.mjs";
 import LeverComponent from "../LeverComponent.mjs";
 
-addStatus("repair", "Repairing")
+addStatus("repair", "Repairing");
 
 export default class AutoRepair extends LeverComponent {
-  enable = startDamageListener
-  disable = stopDamageListener
+  static enable() {
+    super.enable();
+    startDamageListener();
+  }
+  static disable() {
+    super.disable();
+    stopDamageListener();
+  }
 }
 
 let prevHotbarSlot = 0;
@@ -72,7 +85,7 @@ function startDamageListener() {
                   item = e.item;
                   switchToSword();
                   tp("xp");
-                  autoDropIntegration("xp")
+                  autoDropIntegration("xp");
                   running = true;
                   hitLoop: while (running) {
                     switch (getStatus()) {

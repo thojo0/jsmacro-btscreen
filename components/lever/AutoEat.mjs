@@ -11,8 +11,14 @@ import LeverComponent from "../LeverComponent.mjs";
 addStatus("eat", "Eating")
 
 export default class AutoEat extends LeverComponent {
-  enable = startHungerListener
-  disable = stopHungerListener
+  static enable() {
+    super.enable();
+    startHungerListener();
+  }
+  static disable() {
+    super.disable();
+    stopHungerListener();
+  }
 }
 
 function getOffhand(inv = Player.openInventory()) {

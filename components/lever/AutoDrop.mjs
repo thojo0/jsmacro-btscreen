@@ -14,8 +14,14 @@ import LeverComponent from "../LeverComponent.mjs";
 addStatus("drop", "Dropping Items");
 
 export default class AutoDrop extends LeverComponent {
-  enable = startEffectListener
-  disable = stopEffectListener
+  static enable() {
+    super.enable();
+    startEffectListener();
+  }
+  static disable() {
+    super.disable();
+    stopEffectListener();
+  }
 }
 
 let slots;

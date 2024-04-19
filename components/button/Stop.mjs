@@ -1,6 +1,7 @@
 import * as Baritone from "../../Baritone.mjs";
 import { random } from "../../Helper.mjs";
 import ButtonComponent from "../ButtonComponent.mjs";
+import Repeat from "../lever/Repeat.mjs";
 
 function getText() {
   const builder = Chat.createTextBuilder();
@@ -26,6 +27,7 @@ export default class Stop extends ButtonComponent {
     return getText();
   }
   run() {
+    Repeat.disable();
     Baritone.execute("stop");
   }
 }

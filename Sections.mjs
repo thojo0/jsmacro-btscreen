@@ -2,9 +2,10 @@ import Config from "./Config.mjs";
 import { tpCommand } from "./Helper.mjs";
 import { Col, Row } from "./Screen.mjs";
 import { button, input, lever, visual } from "./components/index.mjs";
+import Repeat from "./components/lever/Repeat.mjs";
 
 function getBlockInput(command) {
-  return [() => `${command} ${input.text.get("blockInput")}`, command];
+  return [() => `${command} ${input.text.get("Blocks")}`, command];
 }
 
 export default new Row(
@@ -39,7 +40,9 @@ export default new Row(
         new button.restartService(),
         new button.openFile(__dirname + "/Config.mjs"),
         new button.setPreset("default"),
-        new button.setPreset("farm")
+        new button.setPreset("farm"),
+        new input.text("Repeat", "1d 1h 1m", "2h16m32s"),
+        new Repeat()
       )
     ),
     new visual.empty(null, Config.gui.component.height / 4),
@@ -54,7 +57,7 @@ export default new Row(
     ),
     new visual.empty(null, Config.gui.component.height / 4),
     new visual.text("Modification"),
-    new input.text("blockInput", "<block> | <blocks...> <toblock>", "", 3),
+    new input.text("Blocks", "<block> | <blocks...> <toblock>", "", 3),
     new Row(
       getBlockInput("sel set"),
       getBlockInput("sel walls"),
@@ -64,7 +67,7 @@ export default new Row(
       new button.function(
         input.text.set,
         "Amethyst Preset",
-        "blockInput",
+        "Blocks",
         "small_amethyst_bud medium_amethyst_bud large_amethyst_bud amethyst_cluster air"
       ),
       getBlockInput("sel replace")

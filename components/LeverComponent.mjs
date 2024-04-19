@@ -13,11 +13,14 @@ export default class LeverComponent extends ButtonComponent {
     return builder.build();
   }
   run() {
-    if (this.constructor.enabled) this.disable();
-    else this.enable();
-    this.constructor.enabled = !this.constructor.enabled;
+    if (this.constructor.enabled) this.constructor.disable();
+    else this.constructor.enable();
     this.elements[0].setLabel(this.label);
   }
-  enable() {}
-  disable() {}
+  static enable() {
+    this.enabled = true;
+  }
+  static disable() {
+    this.enabled = false;
+  }
 }

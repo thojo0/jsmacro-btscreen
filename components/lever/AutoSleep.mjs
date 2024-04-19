@@ -7,8 +7,14 @@ import LeverComponent from "../LeverComponent.mjs";
 addStatus("sleep", "Sleeping")
 
 export default class AutoSleep extends LeverComponent {
-  enable = startTickListener
-  disable = stopTickListener
+  static enable() {
+    super.enable();
+    startTickListener();
+  }
+  static disable() {
+    super.disable();
+    stopTickListener();
+  }
 }
 
 function getDaytime() {
