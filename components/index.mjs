@@ -27,6 +27,7 @@ import AutoEatLever from "./lever/AutoEat.mjs";
 import AutoHasteLever from "./lever/AutoHaste.mjs";
 import AutoRepairLever from "./lever/AutoRepair.mjs";
 import AutoSleepLever from "./lever/AutoSleep.mjs";
+import RepeatLever from "./lever/Repeat.mjs";
 
 export const lever = {
   autoDrop: AutoDropLever,
@@ -34,6 +35,7 @@ export const lever = {
   autoHaste: AutoHasteLever,
   autoRepair: AutoRepairLever,
   autoSleep: AutoSleepLever,
+  repeat: RepeatLever,
 };
 
 import EmptyVisual from "./visual/Empty.mjs";

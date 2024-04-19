@@ -2,7 +2,6 @@ import Config from "./Config.mjs";
 import { tpCommand } from "./Helper.mjs";
 import { Col, Row } from "./Screen.mjs";
 import { button, input, lever, visual } from "./components/index.mjs";
-import Repeat from "./components/lever/Repeat.mjs";
 
 function getBlockInput(command) {
   return [() => `${command} ${input.text.get("Blocks")}`, command];
@@ -42,7 +41,7 @@ export default new Row(
         new button.setPreset("default"),
         new button.setPreset("farm"),
         new input.text("Repeat", "1d 1h 1m", "2h16m32s"),
-        new Repeat()
+        new lever.repeat()
       )
     ),
     new visual.empty(null, Config.gui.component.height / 4),
