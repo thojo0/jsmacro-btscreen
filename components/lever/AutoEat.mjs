@@ -4,20 +4,20 @@
 // Inspired by: https://discord.com/channels/732004268948586545/1097289256839434393/1097677403213533185
 
 import * as Baritone from "../../Baritone.mjs";
-import { addStatus, addStop, delStop, getStatus, log } from "../../Helper.mjs";
+import { addStatus, isStatus, log } from "../../Helper.mjs";
 import Config from "../../Config.mjs";
 import LeverComponent from "../LeverComponent.mjs";
 
-addStatus("eat", "Eating")
+addStatus("eat", "Eating");
 
 export default class AutoEat extends LeverComponent {
   static enable() {
+    this.hungerListener = startHungerListener();
     super.enable();
-    startHungerListener();
   }
-  static disable() {
-    super.disable();
-    stopHungerListener();
+  static stop() {
+    JsMacros.off(this.hungerListener);
+    delete this.hungerListener;
   }
 }
 
@@ -46,49 +46,37 @@ function eat() {
   KeyBind.keyBind("key.use", false);
 }
 
-let hungerListener = null;
 function startHungerListener() {
-  hungerListener = JsMacros.on(
+  return JsMacros.on(
     "HungerChange",
     JavaWrapper.methodToJava((e) => {
-      switch (getStatus()) {
-        case getStatus("mine"):
-          const inv = Player.openInventory();
-          const offhand = getOffhand(inv);
-          if (offhand.isFood()) {
-            let minLevel = Config.autoEat.level;
-            if (minLevel === null) {
-              minLevel = 21 - getHunger(offhand);
-            }
-            if (minLevel < 21) {
-              if (e.foodLevel < minLevel) {
-                if (Config.autoEat.saveMode) {
-                  Baritone.pause("eat");
-                  switchHands(inv);
-                } else {
-                  log("Eating");
-                }
-                while (getFoodLevel() < minLevel) {
-                  eat();
-                }
-                if (Config.autoEat.saveMode) {
-                  switchHands(inv);
-                  Baritone.resume();
-                }
+      if (isStatus("mine")) {
+        const inv = Player.openInventory();
+        const offhand = getOffhand(inv);
+        if (offhand.isFood()) {
+          let minLevel = Config.autoEat.level;
+          if (minLevel === null) {
+            minLevel = 21 - getHunger(offhand);
+          }
+          if (minLevel < 21) {
+            if (e.foodLevel < minLevel) {
+              if (Config.autoEat.saveMode) {
+                Baritone.pause("eat");
+                switchHands(inv);
+              } else {
+                log("Eating");
+              }
+              while (getFoodLevel() < minLevel) {
+                eat();
+              }
+              if (Config.autoEat.saveMode) {
+                switchHands(inv);
+                Baritone.resume();
               }
             }
           }
-          break;
+        }
       }
     })
   );
-  addStop(AutoEat.label, () => {
-    JsMacros.off(hungerListener);
-    hungerListener = null;
-  });
-  log(AutoEat.label + " enabled");
-}
-function stopHungerListener() {
-  delStop(AutoEat.label, true);
-  log(AutoEat.label + " disabled");
 }

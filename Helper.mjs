@@ -13,16 +13,17 @@ export function addInit(func, first = false) {
 }
 
 // shutdown helper
-const stopObject = {};
-event.stopListener = JavaWrapper.methodToJava(() =>
-  Object.values(stopObject).forEach((f) => f())
-);
+const stopObject = new Map();
+event.stopListener = JavaWrapper.methodToJava(() => {
+  stopObject.forEach((f) => f());
+});
 export function addStop(id, func) {
-  stopObject[id] = func;
+  stopObject.set(id, func);
 }
-export function delStop(id, exec) {
-  if (exec) stopObject[id]();
-  delete stopObject[id];
+export function delStop(id, skipExec = false) {
+  if (!stopObject.has(id)) return false;
+  if (!skipExec) stopObject.get(id)();
+  return stopObject.delete(id);
 }
 export function restartService() {
   JsMacros.runScript(
@@ -46,28 +47,31 @@ export function log(text) {
 }
 
 // status helper
-const posibleStatus = {
-  idle: "Idle",
-  mine: "Mining",
-};
-export function getStatus(id = "") {
-  if (id) return posibleStatus[id];
+const posibleStatus = new Map([
+  ["idle", "Idle"],
+  ["mine", "Mining"],
+]);
+let currentStatus;
+export function isStatus(id) {
+  return currentStatus === posibleStatus.get(id);
+}
+export function getStatus(id = undefined) {
+  if (id !== undefined) return posibleStatus.get(id);
   return currentStatus;
 }
 export function addStatus(id, status) {
-  posibleStatus[id] = status;
+  posibleStatus.set(id, status);
 }
-let currentStatus = null;
-let statusEvent = null; // BTScreenStatusChange
+let statusEvent; // BTScreenStatusChange
 addInit(() => {
-  currentStatus = posibleStatus[Baritone.isActive() ? "mine" : "idle"];
+  currentStatus = posibleStatus.get(Baritone.isActive() ? "mine" : "idle");
   statusEvent = JsMacros.createCustomEvent(Config.eventName); // BTScreenStatusChange
   statusEvent.registerEvent();
 }, true);
 export function setStatus(id) {
-  statusEvent.putString("status", posibleStatus[id]);
   statusEvent.putString("oldStatus", currentStatus);
-  currentStatus = posibleStatus[id];
+  currentStatus = posibleStatus.get(id);
+  statusEvent.putString("status", currentStatus);
   statusEvent.trigger();
 }
 

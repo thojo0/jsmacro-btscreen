@@ -1,18 +1,18 @@
 import * as Baritone from "../../Baritone.mjs";
-import { addStatus, addStop, delStop, getStatus, log, tp } from "../../Helper.mjs";
+import { addStatus, isStatus, tp } from "../../Helper.mjs";
 import { autoDropIntegration } from "./AutoDrop.mjs";
 import LeverComponent from "../LeverComponent.mjs";
 
-addStatus("haste", "Refreshing Haste")
+addStatus("haste", "Refreshing Haste");
 
 export default class AutoHaste extends LeverComponent {
   static enable() {
+    this.tickListener = startTickListener();
     super.enable();
-    startTickListener();
   }
-  static disable() {
-    super.disable();
-    stopTickListener();
+  static stop() {
+    JsMacros.off(this.tickListener);
+    delete this.tickListener;
   }
 }
 
@@ -23,35 +23,23 @@ function hasHaste(errorReturn = false) {
     return errorReturn;
   }
 }
-let tickListener = null;
 function startTickListener() {
-  tickListener = JsMacros.on(
+  return JsMacros.on(
     "Tick",
     JavaWrapper.methodToJava(() => {
-      switch (getStatus()) {
-        case getStatus("mine"):
-          if (hasHaste(true)) {
-            break;
-          }
-          Baritone.pause("haste");
-          tp("haste");
-          autoDropIntegration("haste")
-          while (!hasHaste()) {
-            JsMacros.waitForEvent("StatusEffectUpdate");
-          }
-          tp("mine");
-          Baritone.resume();
-          break;
+      if (isStatus("mine")) {
+        if (hasHaste(true)) {
+          return;
+        }
+        Baritone.pause("haste");
+        tp("haste");
+        autoDropIntegration("haste");
+        while (!hasHaste()) {
+          JsMacros.waitForEvent("StatusEffectUpdate");
+        }
+        tp("mine");
+        Baritone.resume();
       }
     })
   );
-  addStop(AutoHaste.label, () => {
-    JsMacros.off(tickListener);
-    tickListener = null;
-  });
-  log(`${AutoHaste.label} enabled`);
-}
-function stopTickListener() {
-  delStop(AutoHaste.label, true);
-  log(`${AutoHaste.label} disabled`);
 }

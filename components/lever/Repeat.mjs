@@ -1,18 +1,24 @@
 import * as Baritone from "../../Baritone.mjs";
-import { addStop, delStop, getStatus, log, tp } from "../../Helper.mjs";
+import { isStatus, log } from "../../Helper.mjs";
 import LeverComponent from "../LeverComponent.mjs";
 import Text from "../input/Text.mjs";
 
 export default class Repeat extends LeverComponent {
   static enable() {
-    super.enable();
     const interval = getInterval();
-    if (interval > 0) startTickListener(interval);
-    else this.disable();
+    if (interval < 1000) {
+      const builder = Chat.createTextBuilder();
+      builder.append(`${this.label}: Minimum is one second!`);
+      builder.withColor(0xc);
+      log(builder);
+      return;
+    }
+    this.tickListener = startTickListener(interval);
+    super.enable();
   }
-  static disable() {
-    super.disable();
-    stopTickListener();
+  static stop() {
+    JsMacros.off(this.tickListener);
+    delete this.tickListener;
   }
 }
 
@@ -20,29 +26,17 @@ function getInterval() {
   return string_to_milliseconds(Text.get("Repeat"));
 }
 
-let tickListener = null;
 function startTickListener(interval) {
   let nextExecuteTime = Time.time() + interval;
-  tickListener = JsMacros.on(
+  return JsMacros.on(
     "Tick",
     JavaWrapper.methodToJava(() => {
-      if (nextExecuteTime > Time.time() || getStatus() !== getStatus("idle"))
-        return;
+      if (nextExecuteTime > Time.time()) return;
       nextExecuteTime = Time.time() + interval;
-      if (Baritone.lastCommand === null) return;
+      if (Baritone.lastCommand === null || !isStatus("idle")) return;
       Baritone.execute(Baritone.lastCommand);
     })
   );
-  addStop(Repeat.label, () => {
-    JsMacros.off(tickListener);
-    tickListener = null;
-  });
-  log(`${Repeat.label} enabled`);
-}
-function stopTickListener() {
-  if (tickListener === null) return;
-  delStop(Repeat.label, true);
-  log(`${Repeat.label} disabled`);
 }
 
 // https://stackoverflow.com/a/77849434

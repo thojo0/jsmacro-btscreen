@@ -1,12 +1,5 @@
 import * as Baritone from "../../Baritone.mjs";
-import {
-  addStatus,
-  addStop,
-  delStop,
-  getStatus,
-  log,
-  tp,
-} from "../../Helper.mjs";
+import { addStatus, getStatus, tp } from "../../Helper.mjs";
 import Config from "../../Config.mjs";
 import { autoDropIntegration } from "./AutoDrop.mjs";
 import LeverComponent from "../LeverComponent.mjs";
@@ -15,12 +8,12 @@ addStatus("repair", "Repairing");
 
 export default class AutoRepair extends LeverComponent {
   static enable() {
+    this.damageListener = startDamageListener();
     super.enable();
-    startDamageListener();
   }
-  static disable() {
-    super.disable();
-    stopDamageListener();
+  static stop() {
+    JsMacros.off(this.damageListener);
+    delete this.damageListener;
   }
 }
 
@@ -55,11 +48,10 @@ function switchBack(inv = Player.openInventory()) {
   }
   inv.setSelectedHotbarSlotIndex(prevHotbarSlot);
 }
-let damageListener = null;
 function startDamageListener() {
   let running;
   let item;
-  damageListener = JsMacros.on(
+  return JsMacros.on(
     "ItemDamage",
     JavaWrapper.methodToJava((e) => {
       switch (getStatus()) {
@@ -115,13 +107,4 @@ function startDamageListener() {
       }
     })
   );
-  addStop(AutoRepair.label, () => {
-    JsMacros.off(damageListener);
-    damageListener = null;
-  });
-  log(`${AutoRepair.label} enabled`);
-}
-function stopDamageListener() {
-  delStop(AutoRepair.label, true);
-  log(`${AutoRepair.label} disabled`);
 }

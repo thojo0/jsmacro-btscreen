@@ -3,9 +3,8 @@ import {
   addInit,
   addStatus,
   addStop,
-  delStop,
   getStatus,
-  log,
+  isStatus,
   tp,
 } from "../../Helper.mjs";
 import Config from "../../Config.mjs";
@@ -15,12 +14,12 @@ addStatus("drop", "Dropping Items");
 
 export default class AutoDrop extends LeverComponent {
   static enable() {
+    this.effectListener = startEffectListener();
     super.enable();
-    startEffectListener();
   }
-  static disable() {
-    super.disable();
-    stopEffectListener();
+  static stop() {
+    JsMacros.off(this.effectListener);
+    delete this.effectListener;
   }
 }
 
@@ -56,42 +55,30 @@ addStop(`${AutoDrop.label}Event`, () => {
   JsMacros.off(eventListener);
 });
 
-let pickupListener = null;
 function startEffectListener() {
   setSlots();
-  pickupListener = JsMacros.on(
+  return JsMacros.on(
     "ItemPickup",
     JavaWrapper.methodToJava(() => {
-      switch (getStatus()) {
-        case getStatus("mine"):
-          if (Player.openInventory().findFreeInventorySlot() !== -1) {
-            break;
-          }
-          Baritone.pause("drop");
-          tp("drop");
-          dropSlots();
-          tp("mine");
-          Baritone.resume();
-          break;
+      if (
+        isStatus("mine") &&
+        Player.openInventory().findFreeInventorySlot() === -1
+      ) {
+        Baritone.pause("drop");
+        tp("drop");
+        dropSlots();
+        tp("mine");
+        Baritone.resume();
       }
     })
   );
-  addStop(AutoDrop.label, () => {
-    JsMacros.off(pickupListener);
-    pickupListener = null;
-  });
-  log(`${AutoDrop.label} enabled`);
-}
-function stopEffectListener() {
-  delStop(AutoDrop.label, true);
-  log(`${AutoDrop.label} disabled`);
 }
 
 event.putObject("autoDropIntegration", autoDropIntegration);
 export function autoDropIntegration(home) {
   if (
     Config.autoDrop.integration &&
-    pickupListener !== null &&
+    AutoDrop.effectListener !== undefined &&
     Config.home.drop === Config.home[home]
   ) {
     dropSlots();
