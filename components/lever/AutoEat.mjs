@@ -26,9 +26,6 @@ function getOffhand(inv = Player.openInventory()) {
   const offhand = inv.getSlot(invMap.offhand[0]);
   return offhand;
 }
-function getHunger(itemStack) {
-  return itemStack.getRaw().method_7909().method_19264().method_19230();
-}
 function switchHands(inv = Player.openInventory()) {
   const invMap = inv.getMap();
   inv.swapHotbar(invMap.offhand[0], inv.getSelectedHotbarSlotIndex());
@@ -56,7 +53,7 @@ function startHungerListener() {
         if (offhand.isFood()) {
           let minLevel = Config.autoEat.level;
           if (minLevel === null) {
-            minLevel = 21 - getHunger(offhand);
+            minLevel = 21 - offhand.getFood().getHunger();
           }
           if (minLevel < 21) {
             if (e.foodLevel < minLevel) {
