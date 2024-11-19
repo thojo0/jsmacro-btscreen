@@ -84,6 +84,8 @@ export default {
       // will never mine
       blocksToDisallowBreaking: [
         // other
+        "vault",
+        "trial_spawner",
         "spawner",
         "budding_amethyst",
         // block entities
