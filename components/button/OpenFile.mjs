@@ -3,7 +3,7 @@ import ButtonComponent from "../ButtonComponent.mjs";
 const EditorScreen = Java.type(
   "xyz.wagyourtail.jsmacros.client.gui.screens.EditorScreen"
 );
-const JsM = Java.type("xyz.wagyourtail.jsmacros.client.JsMacros");
+const JsM = Java.type("xyz.wagyourtail.jsmacros.client.JsMacrosClient");
 
 export default class OpenFile extends ButtonComponent {
   constructor(file, label = `Open ${FS.getName(file)}`) {
