@@ -76,6 +76,7 @@ export default {
       allowPlace: true,
       // build top to bottom in 5 block layers
       buildInLayers: true,
+      blockBreakSpeed: 0,
       layerHeight: 5,
       layerOrder: true,
       // Item Saver
