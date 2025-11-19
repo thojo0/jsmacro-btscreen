@@ -1,3 +1,13 @@
+# [Project Name]
+
+## 🛑 PROJECT DEPRECATED 🛑
+
+**This repository is archived and is no longer being maintained or updated.**
+
+All future development, bug fixes, and feature requests will be handled in the successor repository:
+
+➡️ **[BTScreen-fabric](https://github.com/ShadowPaint-SP/BTScreen-fabric)**
+
 # jsmacro-btscreen
 Baritone Selection Manager GUI (BTScreen) for the [JsMacro](https://github.com/JsMacros/JsMacros) mod in Minecraft. It started with [Baritone](https://github.com/cabaletta/baritone) sel command shortcuts, for easy use. Now it has a lot more features.
 
