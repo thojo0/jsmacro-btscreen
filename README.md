@@ -1,6 +1,4 @@
-# [Project Name]
-
-## 🛑 PROJECT DEPRECATED 🛑
+# 🛑 PROJECT DEPRECATED 🛑
 
 **This repository is archived and is no longer being maintained or updated.**
 
